@@ -32,7 +32,7 @@ implementation
 {$R *.dfm}
 
 uses
-  DmConn, UnMenu, UnCadastrarConta, UnConfigurarPessoa;
+  DmConn, UnMenu, UnCadastrarConta, UnConfigurarPessoa, UnConsulta;
 
 procedure TFrmConsultaPessoa.FormShow(Sender: TObject);
 begin
@@ -49,13 +49,13 @@ var
 begin
   sId   := GrdConsultaPessoas.Columns.Items[0].Field.Text;
   sNome := GrdConsultaPessoas.Columns.Items[1].Field.Text;
-  if (UnMenu.bAbriuPorMenu) then
+  if (UnConsulta.bAbriuPorConsulta) then
   begin
-    FrmMenu.EdtId.Text   := sId;
-    FrmMenu.EdtNome.Text := sNome;
-    bAbriuPorMenu        := False
+    FrmConsulta.CpoIdNome.Text   := sId;
+    FrmConsulta.CpoNome.Text     := sNome;
+    UnConsulta.bAbriuPorConsulta := False;
   end
-  else if (bAbriuPorCadastroConta) then
+  else if (UnCadastrarConta.bAbriuPorCadastroConta) then
   begin
     FrmCadastrarConta.CpoIdTitular.Text := sId;
     FrmCadastrarConta.CpoNome.Text      := sNome;

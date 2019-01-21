@@ -61,6 +61,7 @@ type
     CpoProcedente: TEdit;
     Label3: TLabel;
     CpoIdProcedente: TEdit;
+    QrCadastraParcela: TFDQuery;
     procedure BtnFecharClick(Sender: TObject);
     procedure GrpModoPagamentoClick(Sender: TObject);
     procedure FormShow(Sender: TObject);
@@ -171,50 +172,58 @@ begin
       sModoPagamento := 'Parcelado';
       QrCadastraConta.Close;
       QrCadastraConta.SQL.Text :=
-        ' INSERT INTO conta(ID_PESSOA,  '+
-        '                   DESCRICAO,  '+
-        '                   MODO_PGTO,  '+
-        '                   VALOR)      '+
-        '            VALUES(:ID_PESSOA, '+
-        '                   :DESCRICAO, '+
-        '                   :MODO_PGTO, '+
-        '                   :VALOR)     ';
-      QrCadastraConta.ParamByName('ID_PESSOA').AsInteger    :=
+        ' INSERT INTO conta(ID_PESSOA,      '+
+        '                   ID_PROCEDENTE,  '+
+        '                   DESCRICAO,      '+
+        '                   MODO_PGTO,      '+
+        '                   VALOR,          '+
+        '                   ID_TIPOCONTA)   '+
+        '            VALUES(:ID_PESSOA,     '+
+        '                   :ID_PROCEDENTE, '+
+        '                   :DESCRICAO,     '+
+        '                   :MODO_PGTO,     '+
+        '                   :VALOR,         '+
+        '                   :ID_TIPOCONTA)  ';
+      QrCadastraConta.ParamByName('ID_PESSOA').AsInteger     :=
         StrToInt(CpoIdTitular.Text);
-      QrCadastraConta.ParamByName('DESCRICAO').AsString     :=
+      QrCadastraConta.ParamByName('ID_PROCEDENTE').AsInteger :=
+        StrToInt(CpoIdProcedente.Text);
+      QrCadastraConta.ParamByName('DESCRICAO').AsString      :=
         CpoDescricao.Text;
-      QrCadastraConta.ParamByName('MODO_PGTO').AsString     :=
+      QrCadastraConta.ParamByName('MODO_PGTO').AsString      :=
         sModoPagamento;
-      QrCadastraConta.ParamByName('VALOR').AsCurrency       :=
+      QrCadastraConta.ParamByName('VALOR').AsCurrency        :=
         StrToCurr(CpoValorConta.Text);
+      QrCadastraConta.ParamByName('ID_TIPOCONTA').AsInteger  :=
+        StrToInt(CpoIdTipoConta.Text);
       QrCadastraConta.ExecSQL;
 
       CdsGrade.First;
       while not CdsGrade.Eof do
       begin
-        QrCadastraConta.Close;
-        QrCadastraConta.SQL.Text :=
+        QrCadastraParcela.Close;
+        QrCadastraParcela.SQL.Text :=
           ' INSERT INTO parcela(NUMERO,        '+
           '                     VALOR,         '+
-          '                     VENC_PARCELA,  '+
+          '                     VENCIMENTO,    '+
           '                     PAGO,          '+
           '                     ID_CONTA)      '+
           '              VALUES(:NUMERO,       '+
           '                     :VALOR,        '+
-          '                     :VENC_PARCELA, '+
+          '                     :VENCIMENTO,   '+
           '                     :PAGO,         '+
           '                     :ID_CONTA)     ';
-        QrCadastraConta.ParamByName('NUMERO').AsInteger        :=
+        QrCadastraParcela.ParamByName('NUMERO').AsInteger        :=
           CdsGradeNUMERO.AsInteger;
-        QrCadastraConta.ParamByName('VALOR').AsCurrency        :=
+        QrCadastraParcela.ParamByName('VALOR').AsCurrency        :=
           CdsGradeVALOR.AsCurrency;
-        QrCadastraConta.ParamByName('VENC_PARCELA').AsDateTime :=
+        QrCadastraParcela.ParamByName('VENCIMENTO').AsDateTime   :=
           CdsGradeVENC_PARCELA.AsDateTime;
-        QrCadastraConta.ParamByName('PAGO').AsString           :=
+        QrCadastraParcela.ParamByName('PAGO').AsString           :=
           CdsGradePAGO.AsString;
-        QrCadastraConta.ParamByName('ID_CONTA').AsInteger      :=
+        QrCadastraParcela.ParamByName('ID_CONTA').AsInteger      :=
           StrToInt(LbId.Caption);
-        QrCadastraConta.ExecSQL;
+        QrCadastraParcela.ExecSQL;
         CdsGrade.Next;
       end;
       LimpaCampos(Sender);
@@ -223,60 +232,86 @@ begin
       sModoPagamento := 'Parcela única';
       QrCadastraConta.Close;
       QrCadastraConta.SQL.Text :=
-        ' INSERT INTO conta(ID_PESSOA,     '+
-        '                   DESCRICAO,     '+
-        '                   MODO_PGTO,     '+
-        '                   VALOR,         '+
-        '                   VENC_CONTA,    '+
-        '                   ID_TIPOCONTA)  '+
-        '            VALUES(:ID_PESSOA,    '+
-        '                   :DESCRICAO,    '+
-        '                   :MODO_PGTO,    '+
-        '                   :VALOR,        '+
-        '                   :VENC_CONTA,   '+
-        '                   :ID_TIPOCONTA) ';
-      QrCadastraConta.ParamByName('ID_PESSOA').AsInteger    :=
+        ' INSERT INTO conta(ID_PESSOA,      '+
+        '                   ID_PROCEDENTE,  '+
+        '                   DESCRICAO,      '+
+        '                   MODO_PGTO,      '+
+        '                   VALOR,          '+
+        '                   ID_TIPOCONTA)   '+
+        '            VALUES(:ID_PESSOA,     '+
+        '                   :ID_PROCEDENTE, '+
+        '                   :DESCRICAO,     '+
+        '                   :MODO_PGTO,     '+
+        '                   :VALOR,         '+
+        '                   :ID_TIPOCONTA)  ';
+      QrCadastraConta.ParamByName('ID_PESSOA').AsInteger     :=
         StrToInt(CpoIdTitular.Text);
-      QrCadastraConta.ParamByName('DESCRICAO').AsString     :=
+      QrCadastraConta.ParamByName('ID_PROCEDENTE').AsInteger :=
+        StrToInt(CpoIdProcedente.Text);
+      QrCadastraConta.ParamByName('DESCRICAO').AsString      :=
         CpoDescricao.Text;
-      QrCadastraConta.ParamByName('MODO_PGTO').AsString     :=
+      QrCadastraConta.ParamByName('MODO_PGTO').AsString      :=
         sModoPagamento;
-      QrCadastraConta.ParamByName('VALOR').AsCurrency       :=
+      QrCadastraConta.ParamByName('VALOR').AsCurrency        :=
         StrToCurr(CpoValorConta.Text);
-      QrCadastraConta.ParamByName('VENC_CONTA').AsDate      :=
-        CpoVencimentoUnico.DateTime;
-      QrCadastraConta.ParamByName('ID_TIPOCONTA').AsInteger :=
+      QrCadastraConta.ParamByName('ID_TIPOCONTA').AsInteger  :=
         StrToInt(CpoIdTipoConta.Text);
       QrCadastraConta.ExecSQL;
+
+      QrCadastraParcela.Close;
+        QrCadastraParcela.SQL.Text :=
+          ' INSERT INTO parcela(NUMERO,        '+
+          '                     VALOR,         '+
+          '                     VENCIMENTO,    '+
+          '                     PAGO,          '+
+          '                     ID_CONTA)      '+
+          '              VALUES(:NUMERO,       '+
+          '                     :VALOR,        '+
+          '                     :VENCIMENTO,  '+
+          '                     :PAGO,         '+
+          '                     :ID_CONTA)     ';
+        QrCadastraParcela.ParamByName('NUMERO').AsInteger        := 1 ;
+        QrCadastraParcela.ParamByName('VALOR').AsCurrency        :=
+          StrToCurr(CpoValorConta.Text);
+        QrCadastraParcela.ParamByName('VENCIMENTO').AsDate     :=
+          CpoVencimentoUnico.Date;
+        QrCadastraParcela.ParamByName('PAGO').AsString           := 'N';
+        QrCadastraParcela.ParamByName('ID_CONTA').AsInteger      :=
+          StrToInt(LbId.Caption);
+        QrCadastraParcela.ExecSQL;
       LimpaCampos(Sender);
     end;
     2:begin
       sModoPagamento := 'Mensal';
       QrCadastraConta.Close;
       QrCadastraConta.SQL.Text :=
-        ' INSERT INTO conta(ID_PESSOA,     '+
-        '                   DESCRICAO,     '+
-        '                   MODO_PGTO,     '+
-        '                   VALOR,         '+
-        '                   DIA_VENC,      '+
-        '                   ID_TIPOCONTA)  '+
-        '            VALUES(:ID_PESSOA,    '+
-        '                   :DESCRICAO,    '+
-        '                   :MODO_PGTO,    '+
-        '                   :VALOR,        '+
-        '                   :DIA_VENC,     '+
-        '                   :ID_TIPOCONTA) ';
-      QrCadastraConta.ParamByName('ID_PESSOA').AsInteger    :=
+        ' INSERT INTO conta(ID_PESSOA,      '+
+        '                   ID_PROCEDENTE,  '+
+        '                   DESCRICAO,      '+
+        '                   MODO_PGTO,      '+
+        '                   VALOR,          '+
+        '                   DIA_VENC,       '+
+        '                   ID_TIPOCONTA)   '+
+        '            VALUES(:ID_PESSOA,     '+
+        '                   :ID_PROCEDENTE, '+
+        '                   :DESCRICAO,     '+
+        '                   :MODO_PGTO,     '+
+        '                   :VALOR,         '+
+        '                   :DIA_VENC,      '+
+        '                   :ID_TIPOCONTA)  ';
+      QrCadastraConta.ParamByName('ID_PESSOA').AsInteger     :=
         StrToInt(CpoIdTitular.Text);
-      QrCadastraConta.ParamByName('DESCRICAO').AsString     :=
+      QrCadastraConta.ParamByName('ID_PROCEDENTE').AsInteger :=
+        StrToInt(CpoIdProcedente.Text);
+      QrCadastraConta.ParamByName('DESCRICAO').AsString      :=
         CpoDescricao.Text;
-      QrCadastraConta.ParamByName('MODO_PGTO').AsString     :=
+      QrCadastraConta.ParamByName('MODO_PGTO').AsString      :=
         sModoPagamento;
-      QrCadastraConta.ParamByName('VALOR').AsCurrency       :=
+      QrCadastraConta.ParamByName('VALOR').AsCurrency        :=
         StrToCurr(CpoValorConta.Text);
-      QrCadastraConta.ParamByName('DIA_VENC').AsInteger     :=
+      QrCadastraConta.ParamByName('DIA_VENC').AsInteger      :=
         StrToInt(CpoDiaVencimento.Text);
-      QrCadastraConta.ParamByName('ID_TIPOCONTA').AsInteger :=
+      QrCadastraConta.ParamByName('ID_TIPOCONTA').AsInteger  :=
         StrToInt(CpoIdTipoConta.Text);
       QrCadastraConta.ExecSQL;
       LimpaCampos(Sender);

@@ -536,4 +536,9 @@ object FrmCadastrarConta: TFrmCadastrarConta
     Left = 320
     Top = 392
   end
+  object QrCadastraParcela: TFDQuery
+    Connection = DataModule1.FDConn
+    Left = 381
+    Top = 392
+  end
 end
