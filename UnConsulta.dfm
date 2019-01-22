@@ -24,7 +24,6 @@ object FrmConsulta: TFrmConsulta
     Color = clWhite
     ParentBackground = False
     TabOrder = 0
-    ExplicitHeight = 549
     object LblSalario: TLabel
       Left = 17
       Top = 48
@@ -65,8 +64,8 @@ object FrmConsulta: TFrmConsulta
       ParentFont = False
     end
     object LblAno: TLabel
-      Left = 16
-      Top = 108
+      Left = 80
+      Top = 76
       Width = 32
       Height = 16
       Caption = 'ANO:'
@@ -77,34 +76,13 @@ object FrmConsulta: TFrmConsulta
       Font.Style = [fsBold]
       ParentFont = False
     end
-    object CpoMes: TComboBox
-      Left = 91
-      Top = 76
-      Width = 121
-      Height = 21
-      TabOrder = 0
-      OnClick = CpoMesClick
-      Items.Strings = (
-        'Janeiro'
-        'Fevereiro'
-        'Mar'#231'o'
-        'Abril'
-        'Maio'
-        'Junho'
-        'Julho'
-        'Agosto'
-        'Setembro'
-        'Outubro'
-        'Novembro'
-        'Dezembro')
-    end
     object GBFiltro: TGroupBox
       Left = 288
       Top = 18
       Width = 192
       Height = 95
       Caption = 'FILTRO'
-      TabOrder = 1
+      TabOrder = 0
       object CpoAtrasadas: TCheckBox
         Left = 11
         Top = 24
@@ -136,7 +114,7 @@ object FrmConsulta: TFrmConsulta
       Width = 705
       Height = 102
       Caption = 'TOTAIS'
-      TabOrder = 2
+      TabOrder = 1
       object LblSaldo: TLabel
         Left = 15
         Top = 19
@@ -280,7 +258,7 @@ object FrmConsulta: TFrmConsulta
       Font.Name = 'Tahoma'
       Font.Style = [fsBold]
       ParentFont = False
-      TabOrder = 3
+      TabOrder = 2
       OnClick = BtnBuscarClick
     end
     object CpoNome: TEdit
@@ -288,14 +266,14 @@ object FrmConsulta: TFrmConsulta
       Top = 18
       Width = 121
       Height = 21
-      TabOrder = 4
+      TabOrder = 3
     end
-    object CpoIdNome: TEdit
+    object CpoIdPessoa: TEdit
       Left = 215
       Top = 18
       Width = 42
       Height = 21
-      TabOrder = 5
+      TabOrder = 4
       Visible = False
     end
     object GrdContas: TDBGrid
@@ -305,7 +283,7 @@ object FrmConsulta: TFrmConsulta
       Height = 161
       Align = alBottom
       DataSource = DsGrade
-      TabOrder = 6
+      TabOrder = 5
       TitleFont.Charset = DEFAULT_CHARSET
       TitleFont.Color = clWindowText
       TitleFont.Height = -11
@@ -360,16 +338,8 @@ object FrmConsulta: TFrmConsulta
       Font.Name = 'Tahoma'
       Font.Style = [fsBold]
       ParentFont = False
-      TabOrder = 7
+      TabOrder = 6
       OnClick = BtnConsultarClick
-    end
-    object CpoNumeroMes: TEdit
-      Left = 215
-      Top = 76
-      Width = 42
-      Height = 21
-      TabOrder = 8
-      Visible = False
     end
     object grpGbFixas: TGroupBox
       Left = 17
@@ -377,7 +347,7 @@ object FrmConsulta: TFrmConsulta
       Width = 705
       Height = 141
       Caption = 'CONTAS FIXAS VARI'#193'VEIS'
-      TabOrder = 9
+      TabOrder = 7
       object GbAgua: TGroupBox
         Left = 242
         Top = 22
@@ -404,32 +374,6 @@ object FrmConsulta: TFrmConsulta
           Width = 81
           Height = 16
           Caption = 'Vencimento:'
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clWindowText
-          Font.Height = -13
-          Font.Name = 'Tahoma'
-          Font.Style = [fsBold]
-          ParentFont = False
-        end
-        object LblValorAnteriorAgua: TLabel
-          Left = 60
-          Top = 25
-          Width = 8
-          Height = 16
-          Caption = '0'
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clWindowText
-          Font.Height = -13
-          Font.Name = 'Tahoma'
-          Font.Style = [fsBold]
-          ParentFont = False
-        end
-        object LblVencAnteriorAgua: TLabel
-          Left = 101
-          Top = 50
-          Width = 8
-          Height = 16
-          Caption = '0'
           Font.Charset = DEFAULT_CHARSET
           Font.Color = clWindowText
           Font.Height = -13
@@ -502,32 +446,6 @@ object FrmConsulta: TFrmConsulta
           Font.Style = [fsBold]
           ParentFont = False
         end
-        object LblValorAnteriorLuz: TLabel
-          Left = 60
-          Top = 25
-          Width = 8
-          Height = 16
-          Caption = '0'
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clWindowText
-          Font.Height = -13
-          Font.Name = 'Tahoma'
-          Font.Style = [fsBold]
-          ParentFont = False
-        end
-        object LblVencAnteriorLuz: TLabel
-          Left = 101
-          Top = 50
-          Width = 8
-          Height = 16
-          Caption = '0'
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clWindowText
-          Font.Height = -13
-          Font.Name = 'Tahoma'
-          Font.Style = [fsBold]
-          ParentFont = False
-        end
         object CpoValorLuz: TEdit
           Left = 64
           Top = 22
@@ -547,7 +465,7 @@ object FrmConsulta: TFrmConsulta
         end
         object BtnSalvarLuz: TButton
           Left = 122
-          Top = 75
+          Top = 76
           Width = 75
           Height = 25
           Caption = 'SALVAR'
@@ -558,6 +476,7 @@ object FrmConsulta: TFrmConsulta
           Font.Style = [fsBold]
           ParentFont = False
           TabOrder = 2
+          OnClick = BtnSalvarLuzClick
         end
       end
       object GbInternet: TGroupBox
@@ -586,32 +505,6 @@ object FrmConsulta: TFrmConsulta
           Width = 81
           Height = 16
           Caption = 'Vencimento:'
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clWindowText
-          Font.Height = -13
-          Font.Name = 'Tahoma'
-          Font.Style = [fsBold]
-          ParentFont = False
-        end
-        object LblVencAnteriorInternet: TLabel
-          Left = 101
-          Top = 50
-          Width = 8
-          Height = 16
-          Caption = '0'
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clWindowText
-          Font.Height = -13
-          Font.Name = 'Tahoma'
-          Font.Style = [fsBold]
-          ParentFont = False
-        end
-        object LblValorAnteriorInternet: TLabel
-          Left = 60
-          Top = 25
-          Width = 8
-          Height = 16
-          Caption = '0'
           Font.Charset = DEFAULT_CHARSET
           Font.Color = clWindowText
           Font.Height = -13
@@ -664,16 +557,26 @@ object FrmConsulta: TFrmConsulta
       Font.Name = 'Tahoma'
       Font.Style = [fsBold]
       ParentFont = False
-      TabOrder = 10
+      TabOrder = 8
     end
     object CpoAno: TSpinEdit
-      Left = 90
-      Top = 105
+      Left = 80
+      Top = 97
       Width = 57
       Height = 22
       MaxValue = 0
       MinValue = 0
-      TabOrder = 11
+      TabOrder = 9
+      Value = 0
+    end
+    object CpoMes: TSpinEdit
+      Left = 16
+      Top = 97
+      Width = 57
+      Height = 22
+      MaxValue = 12
+      MinValue = 1
+      TabOrder = 10
       Value = 0
     end
   end

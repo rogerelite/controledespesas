@@ -16,7 +16,6 @@ type
     LblSalario: TLabel;
     LblData: TLabel;
     LblMes: TLabel;
-    CpoMes: TComboBox;
     GBFiltro: TGroupBox;
     CpoAtrasadas: TCheckBox;
     CpoEmDia: TCheckBox;
@@ -43,12 +42,11 @@ type
     DsGrade: TDataSource;
     BtnBuscar: TButton;
     CpoNome: TEdit;
-    CpoIdNome: TEdit;
+    CpoIdPessoa: TEdit;
     GrdContas: TDBGrid;
     BtnConsultar: TButton;
     CpoSalario: TEdit;
     QrConsulta: TFDQuery;
-    CpoNumeroMes: TEdit;
     grpGbFixas: TGroupBox;
     GbAgua: TGroupBox;
     LblValorAgua: TLabel;
@@ -68,25 +66,20 @@ type
     BtnLimpar: TButton;
     LblAno: TLabel;
     CpoAno: TSpinEdit;
-    LblValorAnteriorLuz: TLabel;
-    LblVencAnteriorLuz: TLabel;
-    LblValorAnteriorAgua: TLabel;
-    LblVencAnteriorAgua: TLabel;
-    LblVencAnteriorInternet: TLabel;
-    LblValorAnteriorInternet: TLabel;
     QrCadastra: TFDQuery;
     BtnSalvarLuz: TButton;
     BtnSalvarAgua: TButton;
     BtnSalvarInternet: TButton;
+    CpoMes: TSpinEdit;
     procedure FormShow(Sender: TObject);
     procedure BtnBuscarClick(Sender: TObject);
     procedure BtnConsultarClick(Sender: TObject);
-    procedure CpoMesClick(Sender: TObject);
     procedure ConsultaContasFixas(Sender: TObject);
+    procedure BtnSalvarLuzClick(Sender: TObject);
   private
     function CalculaSaldo: Currency;
     function CalculaTotalContas: Currency;
-    procedure CadastraContasFixas(Sender: TObject);
+    procedure ConsultaContas(Sender: TObject);
 
   public
 
@@ -115,40 +108,64 @@ end;
 
 procedure TFrmConsulta.BtnConsultarClick(Sender: TObject);
 begin
-  //CalculaTotalContas;
-
   QrConsulta.Close;
   QrConsulta.SQL.Text :=
     ' SELECT *                        '+
     '   FROM contafixa                '+
     '  WHERE MONTH(VENCIMENTO) = :MES '+
     '    AND YEAR(VENCIMENTO) = :ANO  ';
-  QrConsulta.ParamByName('MES').AsInteger := StrToInt(CpoNumeroMes.Text);
+  QrConsulta.ParamByName('MES').AsInteger := StrToInt(CpoMes.Text);
   QrConsulta.ParamByName('ANO').AsInteger := StrToInt(CpoAno.Text);
   QrConsulta.Open;
 
   if (QrConsulta.IsEmpty) then
   begin
-    CpoValorLuz.Visible              := True;
-    CpoVencimentoLuz.Visible         := True;
-    LblValorAnteriorLuz.Visible      := False;
-    LblVencAnteriorLuz.Visible       := False;
-    CpoValorAgua.Visible             := True;
-    CpoVencimentoAgua.Visible        := True;
-    LblValorAnteriorAgua.Visible     := False;
-    LblVencAnteriorAgua.Visible      := False;
-    CpoValorInternet.Visible         := True;
-    CpoVencimentoInternet.Visible    := True;
-    LblValorAnteriorInternet.Visible := False;
-    LblVencAnteriorInternet.Visible  := False;
+    CpoValorLuz.Enabled           := True;
+    CpoVencimentoLuz.Enabled      := True;
+    BtnSalvarLuz.Enabled          := True;
+    CpoValorAgua.Enabled          := True;
+    CpoVencimentoAgua.Enabled     := True;
+    BtnSalvarAgua.Enabled         := True;
+    CpoValorInternet.Enabled      := True;
+    CpoVencimentoInternet.Enabled := True;
+    BtnSalvarInternet.Enabled     := True;
     QrConsulta.Close;
-    CadastraContasFixas(Sender);
   end
   else
   begin
+    CpoValorLuz.Enabled           := False;
+    CpoVencimentoLuz.Enabled      := False;
+    BtnSalvarLuz.Enabled          := False;
+    CpoValorAgua.Enabled          := False;
+    CpoVencimentoAgua.Enabled     := False;
+    BtnSalvarAgua.Enabled         := False;
+    CpoValorInternet.Enabled      := False;
+    CpoVencimentoInternet.Enabled := False;
+    BtnSalvarInternet.Enabled     := False;
     ConsultaContasFixas(Sender);
+    QrConsulta.Close;
   end;
+  //CalculaTotalContas;
   //CalculaSaldo;
+end;
+
+procedure TFrmConsulta.BtnSalvarLuzClick(Sender: TObject);
+begin
+  QrCadastra.Close;
+  QrCadastra.SQL.Text :=
+    ' INSERT INTO contafixa (NOME,        '+
+    '                        VALOR,       '+
+    '                        VENCIMENTO,  '+
+    '                        PAGO)        '+
+    '                VALUES (:NOME,       '+
+    '                        :VALOR,      '+
+    '                        :VENCIMENTO, '+
+    '                        :PAGO)       ';
+  QrCadastra.ParamByName('NOME').AsString     := 'Luz';
+  QrCadastra.ParamByName('VALOR').AsCurrency  := StrToCurr(CpoValorLuz.Text);
+  QrCadastra.ParamByName('VENCIMENTO').AsDate := CpoVencimentoLuz.Date;
+  QrCadastra.ParamByName('PAGO').AsString     := 'N';
+  QrCadastra.ExecSQL;
 end;
 
 function TFrmConsulta.CalculaSaldo : Currency;
@@ -166,10 +183,26 @@ begin
 
 end;
 
+procedure TFrmConsulta.ConsultaContas(Sender: TObject);
+begin
+  QrConsulta.Close;
+  QrConsulta.SQL.Text :=
+    ' SELECT c.*,                                  '+
+    '        p.*                                   '+
+    '         FROM conta c                         '+
+    '   INNER JOIN parcela p                       '+
+    '           ON p.ID_CONTA = c.ID_CONTA         '+
+    '        WHERE c.ID_PESSOA = :ID_PESSOA        '+
+    '          AND MONTH(VENCIMENTO) = :MES        '+
+    '          AND YEAR(VENCIMENTO) = :ANO         ';
+  QrConsulta.ParamByName('ID_PESSOA').AsInteger := StrToInt(CpoIdPessoa.Text);
+  QrConsulta.ParamByName('MES').AsInteger       := CpoMes.Value;
+  QrConsulta.ParamByName('ANO').AsInteger       := CpoAno.Value;
+
+end;
+
 procedure TFrmConsulta.ConsultaContasFixas(Sender: TObject);
 begin
-  LblValorAnteriorLuz.Visible := True;
-  LblVencAnteriorLuz.Visible  := True;
   QrConsulta.Close;
   QrConsulta.SQL.Text :=
     ' SELECT *                        '+
@@ -177,18 +210,13 @@ begin
     '  WHERE MONTH(VENCIMENTO) = :MES '+
     '    AND YEAR(VENCIMENTO) = :ANO  '+
     '    AND NOME = ''Luz''           ';
-  QrConsulta.ParamByName('MES').AsInteger := StrToInt(CpoNumeroMes.Text);
+  QrConsulta.ParamByName('MES').AsInteger := StrToInt(CpoMes.Text);
   QrConsulta.ParamByName('ANO').AsInteger := StrToInt(CpoAno.Text);
   QrConsulta.Open;
-  LblValorAnteriorLuz.Caption := CurrToStr(QrConsulta.FieldByName('VALOR').AsCurrency);
-  LblVencAnteriorLuz.Caption  := QrConsulta.FieldByName('VENCIMENTO').AsString;
-  CpoValorLuz.Visible         := False;
-  CpoVencimentoLuz.Visible    := False;
-  LblValorAnteriorLuz.Visible := True;
+  CpoValorLuz.Text      := CurrToStr(QrConsulta.FieldByName('VALOR').AsCurrency);
+  CpoVencimentoLuz.Date := QrConsulta.FieldByName('VENCIMENTO').AsDateTime;
   QrConsulta.Close;
 
-  LblValorAnteriorAgua.Visible := True;
-  LblVencAnteriorAgua.Visible  := True;
   QrConsulta.Close;
   QrConsulta.SQL.Text :=
     ' SELECT *                        '+
@@ -196,18 +224,13 @@ begin
     '  WHERE MONTH(VENCIMENTO) = :MES '+
     '    AND YEAR(VENCIMENTO) = :ANO  '+
     '    AND NOME = ''Agua''          ';
-  QrConsulta.ParamByName('MES').AsInteger := StrToInt(CpoNumeroMes.Text);
+  QrConsulta.ParamByName('MES').AsInteger := StrToInt(CpoMes.Text);
   QrConsulta.ParamByName('ANO').AsInteger := StrToInt(CpoAno.Text);
   QrConsulta.Open;
-  LblValorAnteriorAgua.Caption := CurrToStr(QrConsulta.FieldByName('VALOR').AsCurrency);
-  LblVencAnteriorAgua.Caption  := QrConsulta.FieldByName('VENCIMENTO').AsString;
-  CpoValorAgua.Visible         := False;
-  CpoVencimentoAgua.Visible    := False;
-  LblValorAnteriorAgua.Visible := True;
+  CpoValorAgua.Text      := CurrToStr(QrConsulta.FieldByName('VALOR').AsCurrency);
+  CpoVencimentoAgua.Date := QrConsulta.FieldByName('VENCIMENTO').AsDateTime;
   QrConsulta.Close;
 
-  LblValorAnteriorInternet.Visible := True;
-  LblVencAnteriorInternet.Visible  := True;
   QrConsulta.Close;
   QrConsulta.SQL.Text :=
     ' SELECT *                        '+
@@ -215,87 +238,20 @@ begin
     '  WHERE MONTH(VENCIMENTO) = :MES '+
     '    AND YEAR(VENCIMENTO) = :ANO  '+
     '    AND NOME = ''Internet''      ';
-  QrConsulta.ParamByName('MES').AsInteger := StrToInt(CpoNumeroMes.Text);
+  QrConsulta.ParamByName('MES').AsInteger := StrToInt(CpoMes.Text);
   QrConsulta.ParamByName('ANO').AsInteger := StrToInt(CpoAno.Text);
   QrConsulta.Open;
-  LblValorAnteriorInternet.Caption := CurrToStr(QrConsulta.FieldByName('VALOR').AsCurrency);
-  LblVencAnteriorInternet.Caption  := QrConsulta.FieldByName('VENCIMENTO').AsString;
-  CpoValorInternet.Visible         := False;
-  CpoVencimentoInternet.Visible    := False;
-  LblValorAnteriorInternet.Visible := True;
+  CpoValorInternet.Text      := CurrToStr(QrConsulta.FieldByName('VALOR').AsCurrency);
+  CpoVencimentointernet.Date := QrConsulta.FieldByName('VENCIMENTO').AsDateTime;
   QrConsulta.Close;
 end;
 
-procedure TFrmConsulta.CadastraContasFixas(Sender: TObject);
-begin
-  QrCadastra.Close;
-  QrCadastra.SQL.Text :=
-    ' INSERT INTO contafixa (NOME,        '+
-    '                        VALOR,       '+
-    '                        VENCIMENTO,  '+
-    '                        PAGO)        '+
-    '                VALUES (:NOME,       '+
-    '                        :VALOR,      '+
-    '                        :VENCIMENTO, '+
-    '                        :PAGO)       ';
-  QrCadastra.ParamByName('NOME').AsString       := ;
-  QrCadastra.ParamByName('VALOR').AsCurrency    := CpoValorLuz.Text;
-  QrCadastra.ParamByName('VENCIMENTO').AsString := DateToStr(CpoVencimentoLuz.Date);
-  QrCadastra.ParamByName('PAGO').AsString       := 'N';
-end;
-
-procedure TFrmConsulta.CpoMesClick(Sender: TObject);
-begin
-  case CpoMes.ItemIndex of
-    0:begin
-        CpoNumeroMes.Text := '1';
-      end;
-    1:begin
-        CpoNumeroMes.Text := '2';
-      end;
-    2:begin
-        CpoNumeroMes.Text := '3';
-      end;
-    3:begin
-        CpoNumeroMes.Text := '4';
-      end;
-    4:begin
-        CpoNumeroMes.Text := '5';
-      end;
-    5:begin
-        CpoNumeroMes.Text := '6';
-      end;
-    6:begin
-        CpoNumeroMes.Text := '7';
-      end;
-    7:begin
-        CpoNumeroMes.Text := '8';
-      end;
-    8:begin
-        CpoNumeroMes.Text := '9';
-      end;
-    9:begin
-        CpoNumeroMes.Text := '10';
-      end;
-    10:begin
-         CpoNumeroMes.Text := '11';
-       end;
-    11:begin
-         CpoNumeroMes.Text := '12';
-       end;
-  end;
-end;
 
 procedure TFrmConsulta.FormShow(Sender: TObject);
 begin
-  LblData.Caption                  := DateToStr(Date);
-  CpoAno.Value                     := YearOf(StrToDate(LblData.Caption));
-  LblValorAnteriorLuz.Visible      := False;
-  LblVencAnteriorLuz.Visible       := False;
-  LblValorAnteriorAgua.Visible     := False;
-  LblVencAnteriorAgua.Visible      := False;
-  LblValorAnteriorInternet.Visible := False;
-  LblVencAnteriorInternet.Visible  := False;
+  LblData.Caption := DateToStr(Date);
+  CpoMes.Value    := MonthOf(StrToDate(LblData.Caption));
+  CpoAno.Value    := YearOf(StrToDate(LblData.Caption));
 end;
 
 end.
