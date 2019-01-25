@@ -51,7 +51,7 @@ begin
   sNome := GrdConsultaPessoas.Columns.Items[1].Field.Text;
   if (UnConsulta.bAbriuPorConsulta) then
   begin
-    FrmConsulta.CpoIdNome.Text   := sId;
+    FrmConsulta.CpoIdPessoa.Text := sId;
     FrmConsulta.CpoNome.Text     := sNome;
     UnConsulta.bAbriuPorConsulta := False;
   end

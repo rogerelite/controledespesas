@@ -411,6 +411,7 @@ object FrmConsulta: TFrmConsulta
           Font.Style = [fsBold]
           ParentFont = False
           TabOrder = 2
+          OnClick = BtnSalvarAguaClick
         end
       end
       object GbLuz: TGroupBox
@@ -542,6 +543,7 @@ object FrmConsulta: TFrmConsulta
           Font.Style = [fsBold]
           ParentFont = False
           TabOrder = 2
+          OnClick = BtnSalvarInternetClick
         end
       end
     end
@@ -558,6 +560,7 @@ object FrmConsulta: TFrmConsulta
       Font.Style = [fsBold]
       ParentFont = False
       TabOrder = 8
+      OnClick = BtnLimparClick
     end
     object CpoAno: TSpinEdit
       Left = 80
@@ -577,7 +580,7 @@ object FrmConsulta: TFrmConsulta
       MaxValue = 12
       MinValue = 1
       TabOrder = 10
-      Value = 0
+      Value = 1
     end
   end
   object CpoSalario: TEdit
@@ -634,5 +637,10 @@ object FrmConsulta: TFrmConsulta
     Connection = DataModule1.FDConn
     Left = 571
     Top = 453
+  end
+  object QrFixas: TFDQuery
+    Connection = DataModule1.FDConn
+    Left = 571
+    Top = 405
   end
 end
