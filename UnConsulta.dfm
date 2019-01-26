@@ -82,7 +82,7 @@ object FrmConsulta: TFrmConsulta
       Width = 192
       Height = 95
       Caption = 'FILTRO'
-      TabOrder = 0
+      TabOrder = 9
       object CpoAtrasadas: TCheckBox
         Left = 11
         Top = 24
@@ -114,7 +114,7 @@ object FrmConsulta: TFrmConsulta
       Width = 705
       Height = 102
       Caption = 'TOTAIS'
-      TabOrder = 1
+      TabOrder = 8
       object LblSaldo: TLabel
         Left = 15
         Top = 19
@@ -258,7 +258,7 @@ object FrmConsulta: TFrmConsulta
       Font.Name = 'Tahoma'
       Font.Style = [fsBold]
       ParentFont = False
-      TabOrder = 2
+      TabOrder = 0
       OnClick = BtnBuscarClick
     end
     object CpoNome: TEdit
@@ -266,14 +266,14 @@ object FrmConsulta: TFrmConsulta
       Top = 18
       Width = 121
       Height = 21
-      TabOrder = 3
+      TabOrder = 1
     end
     object CpoIdPessoa: TEdit
       Left = 215
       Top = 18
       Width = 42
       Height = 21
-      TabOrder = 4
+      TabOrder = 2
       Visible = False
     end
     object GrdContas: TDBGrid
@@ -283,7 +283,7 @@ object FrmConsulta: TFrmConsulta
       Height = 161
       Align = alBottom
       DataSource = DsGrade
-      TabOrder = 5
+      TabOrder = 10
       TitleFont.Charset = DEFAULT_CHARSET
       TitleFont.Color = clWindowText
       TitleFont.Height = -11
@@ -347,14 +347,14 @@ object FrmConsulta: TFrmConsulta
       Width = 705
       Height = 141
       Caption = 'CONTAS FIXAS VARI'#193'VEIS'
-      TabOrder = 7
+      TabOrder = 5
       object GbAgua: TGroupBox
         Left = 242
         Top = 22
         Width = 220
         Height = 110
         Caption = #193'GUA'
-        TabOrder = 0
+        TabOrder = 1
         object LblValorAgua: TLabel
           Left = 15
           Top = 24
@@ -420,7 +420,7 @@ object FrmConsulta: TFrmConsulta
         Width = 220
         Height = 110
         Caption = 'LUZ'
-        TabOrder = 1
+        TabOrder = 0
         object LblValorLuz: TLabel
           Left = 15
           Top = 24
@@ -559,7 +559,7 @@ object FrmConsulta: TFrmConsulta
       Font.Name = 'Tahoma'
       Font.Style = [fsBold]
       ParentFont = False
-      TabOrder = 8
+      TabOrder = 7
       OnClick = BtnLimparClick
     end
     object CpoAno: TSpinEdit
@@ -569,7 +569,7 @@ object FrmConsulta: TFrmConsulta
       Height = 22
       MaxValue = 0
       MinValue = 0
-      TabOrder = 9
+      TabOrder = 4
       Value = 0
     end
     object CpoMes: TSpinEdit
@@ -579,7 +579,7 @@ object FrmConsulta: TFrmConsulta
       Height = 22
       MaxValue = 12
       MinValue = 1
-      TabOrder = 10
+      TabOrder = 3
       Value = 1
     end
   end
@@ -597,10 +597,10 @@ object FrmConsulta: TFrmConsulta
     Left = 624
     Top = 405
     object CdsGradeNUM_PARCELA: TIntegerField
-      FieldName = 'NUM_PARCELA'
+      FieldName = 'PARCELA'
     end
     object CdsGradeTIPO_CONTA: TStringField
-      FieldName = 'TIPO_CONTA'
+      FieldName = 'TIPO'
       Size = 25
     end
     object CdsGradeVALOR: TCurrencyField
@@ -610,12 +610,12 @@ object FrmConsulta: TFrmConsulta
       FieldName = 'DESCRICAO'
       Size = 250
     end
-    object CdsGradeVENCIMENTO: TDateField
-      FieldName = 'VENCIMENTO'
-    end
     object CdsGradePAGO: TStringField
       FieldName = 'PAGO'
       Size = 3
+    end
+    object CdsGradeVENCIMENTO: TStringField
+      FieldName = 'VENCIMENTO'
     end
   end
   object QrGrade: TFDQuery
@@ -624,7 +624,7 @@ object FrmConsulta: TFrmConsulta
     Top = 405
   end
   object DsGrade: TDataSource
-    DataSet = QrGrade
+    DataSet = CdsGrade
     Left = 625
     Top = 453
   end
