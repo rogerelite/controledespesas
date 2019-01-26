@@ -80,11 +80,15 @@ type
     procedure BtnSalvarAguaClick(Sender: TObject);
     procedure BtnSalvarInternetClick(Sender: TObject);
     procedure BtnLimparClick(Sender: TObject);
+    procedure CpoAtrasadasClick(Sender: TObject);
+    procedure CpoEmDiaClick(Sender: TObject);
+    procedure CpoPagasClick(Sender: TObject);
   private
     function CalculaSaldo: Currency;
     function CalculaTotalContas: Currency;
     procedure ConsultaContas(Sender: TObject);
     procedure LimparCampos(Sender: TObject);
+    function CalculaTotalFixas: Currency;
 
   public
 
@@ -113,8 +117,11 @@ end;
 
 procedure TFrmConsulta.BtnConsultarClick(Sender: TObject);
 var
+  cTotalContas : Currency;
   bLuz, bAgua, bInternet : Boolean;
 begin
+  CdsGrade.EmptyDataSet;
+
   if (CpoNome.Text = '') then
   begin
     ShowMessage('Selecione uma pessoa.');
@@ -209,10 +216,12 @@ begin
     CpoVencimentoInternet.Enabled  := True;
     BtnSalvarInternet.Enabled      := True;
   end;
+
   QrFixas.Close;
   ConsultaContas(Sender);
-  //CalculaTotalContas;
-  //CalculaSaldo;
+  cTotalContas           := CalculaTotalContas;
+  LblValorContas.Caption := CurrToStr(cTotalContas);
+  CalculaSaldo;
 end;
 
 procedure TFrmConsulta.BtnLimparClick(Sender: TObject);
@@ -285,38 +294,73 @@ function TFrmConsulta.CalculaSaldo : Currency;
 var
   cSalario, cTotalContas : Currency;
 begin
-  cSalario     := StrToCurr(CpoSalario.Text);
-  cTotalContas := StrToCurr(LblValorContas.Caption);
+  cSalario     := StrToCurrDef(CpoSalario.Text,0);
+  cTotalContas := StrToCurrDef(LblValorContas.Caption,0);
 
   LblValorSaldo.Caption := CurrToStr(cSalario - cTotalContas);
 end;
 
 function TFrmConsulta.CalculaTotalContas : Currency;
+var
+  cTotalContas, cTotalContasFixas : Currency;
 begin
+  cTotalContas := 0;
+  CdsGrade.First;
 
+  while not CdsGrade.EoF do
+  begin
+    cTotalContas := cTotalContas + CdsGradeVALOR.AsCurrency;
+    CdsGrade.Next;
+  end;
+
+  cTotalContasFixas := CalculaTotalFixas;
+  Result            := cTotalContas + cTotalContasFixas;
+end;
+
+function TFrmConsulta.CalculaTotalFixas : Currency;
+begin
+  Result := StrToCurrDef(CpoValorLuz.Text,0) +
+                       StrToCurrDef(CpoValorAgua.Text,0) +
+                       StrToCurrDef(CpoValorinternet.Text,0);
 end;
 
 procedure TFrmConsulta.ConsultaContas(Sender: TObject);
 begin
   QrConsulta.Close;
   QrConsulta.SQL.Text :=
-    '     SELECT c.DESCRICAO,                     '+
-    ' 	         p.NUMERO,                        '+
-    ' 	         P.VALOR,                         '+
-    ' 	         p.VENCIMENTO,                    '+
-    ' 	         p.PAGO,                          '+
-    ' 	         ct.NOME                          '+
-    '       FROM conta c                          '+
-    ' INNER JOIN parcela p                        '+
-    '         ON p.ID_CONTA = c.ID_CONTA          '+
-    ' INNER JOIN contatipo ct                     '+
-    '         ON ct.ID_CONTATIPO = c.ID_CONTATIPO '+
-    '      WHERE c.ID_PESSOA = :ID_PESSOA         '+
-    '        AND MONTH(VENCIMENTO) = :MES         '+
-    '        AND YEAR(VENCIMENTO) = :ANO          ';
+    '    SELECT c.DESCRICAO,                     '+
+    '	         p.NUMERO,                         '+
+    '	         P.VALOR,                          '+
+    '	         p.VENCIMENTO,                     '+
+    '	         p.PAGO,                           '+
+    '	         ct.NOME                           '+
+    '      FROM conta c                          '+
+    ' LEFT JOIN parcela p                        '+
+    '        ON p.ID_CONTA = c.ID_CONTA          '+
+    ' LEFT JOIN contatipo ct                     '+
+    '        ON ct.ID_CONTATIPO = c.ID_CONTATIPO '+
+    '     WHERE c.ID_PESSOA = :ID_PESSOA         '+
+    '       AND MONTH(VENCIMENTO) = :MES         '+
+    '       AND YEAR(VENCIMENTO) = :ANO          ';
   QrConsulta.ParamByName('ID_PESSOA').AsInteger := StrToInt(CpoIdPessoa.Text);
   QrConsulta.ParamByName('MES').AsInteger       := CpoMes.Value;
   QrConsulta.ParamByName('ANO').AsInteger       := CpoAno.Value;
+
+  if (CpoAtrasadas.Checked) then
+  begin
+    QrConsulta.SQL.Add(' AND p.VENCIMENTO < '+ LblData.Caption);
+  end;
+
+  if (CpoEmDia.Checked) then
+  begin
+    QrConsulta.SQL.Add(' AND p.VENCIMENTO >= '+ LblData.Caption);
+  end;
+
+  if (CpoPagas.Checked) then
+  begin
+    QrConsulta.SQL.Add(' AND p.PAGO = ''S'' ');
+  end;
+
   QrConsulta.Open;
 
   while not QrConsulta.Eof do
@@ -387,6 +431,21 @@ begin
   QrConsulta.Close;
 end;
 
+procedure TFrmConsulta.CpoAtrasadasClick(Sender: TObject);
+begin
+  BtnConsultarClick(Sender);
+end;
+
+procedure TFrmConsulta.CpoEmDiaClick(Sender: TObject);
+begin
+  BtnConsultarClick(Sender);
+end;
+
+procedure TFrmConsulta.CpoPagasClick(Sender: TObject);
+begin
+  BtnConsultarClick(Sender);
+end;
+
 procedure TFrmConsulta.FormShow(Sender: TObject);
 begin
   LblData.Caption                := DateToStr(Date);
@@ -408,6 +467,11 @@ begin
   CpoAtrasadas.Checked           := False;
   CpoEmDia.Checked               := False;
   CpoPagas.Checked               := False;
+  LblValorSaldo.Caption          := '0';
+  LblValorContas.Caption         := '0';
+  LblValorAtrasadas.Caption      := '0';
+  LblValorEmDia.Caption          := '0';
+  LblValorPagas.Caption          := '0';
   CpoValorLuz.Clear;
   CpoValorAgua.Clear;
   CpoValorInternet.Clear;
@@ -423,6 +487,7 @@ begin
   BtnSalvarLuz.Enabled           := True;
   BtnSalvarAgua.Enabled          := True;
   BtnSalvarInternet.Enabled      := True;
+  CdsGrade.EmptyDataSet;
 end;
 
 end.

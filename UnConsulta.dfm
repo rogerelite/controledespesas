@@ -90,6 +90,7 @@ object FrmConsulta: TFrmConsulta
         Height = 17
         Caption = 'CONTAS ATRASADAS'
         TabOrder = 0
+        OnClick = CpoAtrasadasClick
       end
       object CpoEmDia: TCheckBox
         Left = 11
@@ -98,6 +99,7 @@ object FrmConsulta: TFrmConsulta
         Height = 17
         Caption = 'CONTAS EM DIA'
         TabOrder = 1
+        OnClick = CpoEmDiaClick
       end
       object CpoPagas: TCheckBox
         Left = 11
@@ -106,6 +108,7 @@ object FrmConsulta: TFrmConsulta
         Height = 17
         Caption = 'CONTAS PAGAS'
         TabOrder = 2
+        OnClick = CpoPagasClick
       end
     end
     object grpGbTotais: TGroupBox
