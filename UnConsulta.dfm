@@ -2,7 +2,7 @@ object FrmConsulta: TFrmConsulta
   Left = 0
   Top = 0
   Caption = 'CONSULTA'
-  ClientHeight = 557
+  ClientHeight = 505
   ClientWidth = 742
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
@@ -19,14 +19,15 @@ object FrmConsulta: TFrmConsulta
     Left = 0
     Top = 0
     Width = 742
-    Height = 557
+    Height = 505
     Align = alClient
     Color = clWhite
     ParentBackground = False
     TabOrder = 0
+    ExplicitHeight = 557
     object LblSalario: TLabel
       Left = 17
-      Top = 48
+      Top = 59
       Width = 63
       Height = 16
       Caption = 'SAL'#193'RIO:'
@@ -39,7 +40,7 @@ object FrmConsulta: TFrmConsulta
     end
     object LblData: TLabel
       Left = 641
-      Top = 21
+      Top = 8
       Width = 82
       Height = 16
       Caption = 'DATA ATUAL'
@@ -52,7 +53,7 @@ object FrmConsulta: TFrmConsulta
     end
     object LblMes: TLabel
       Left = 17
-      Top = 77
+      Top = 85
       Width = 31
       Height = 16
       Caption = 'M'#202'S:'
@@ -65,7 +66,7 @@ object FrmConsulta: TFrmConsulta
     end
     object LblAno: TLabel
       Left = 80
-      Top = 76
+      Top = 84
       Width = 32
       Height = 16
       Caption = 'ANO:'
@@ -78,7 +79,7 @@ object FrmConsulta: TFrmConsulta
     end
     object GBFiltro: TGroupBox
       Left = 288
-      Top = 18
+      Top = 26
       Width = 192
       Height = 95
       Caption = 'FILTRO'
@@ -113,8 +114,8 @@ object FrmConsulta: TFrmConsulta
     end
     object grpGbTotais: TGroupBox
       Left = 17
-      Top = 131
-      Width = 705
+      Top = 153
+      Width = 463
       Height = 102
       Caption = 'TOTAIS'
       TabOrder = 8
@@ -251,7 +252,7 @@ object FrmConsulta: TFrmConsulta
     end
     object BtnBuscar: TButton
       Left = 16
-      Top = 16
+      Top = 24
       Width = 75
       Height = 25
       Caption = 'BUSCAR'
@@ -266,14 +267,14 @@ object FrmConsulta: TFrmConsulta
     end
     object CpoNome: TEdit
       Left = 91
-      Top = 18
+      Top = 26
       Width = 121
       Height = 21
       TabOrder = 1
     end
     object CpoIdPessoa: TEdit
       Left = 215
-      Top = 18
+      Top = 26
       Width = 42
       Height = 21
       TabOrder = 2
@@ -281,10 +282,10 @@ object FrmConsulta: TFrmConsulta
     end
     object GrdContas: TDBGrid
       Left = 1
-      Top = 395
-      Width = 740
-      Height = 161
-      Align = alBottom
+      Top = 268
+      Width = 479
+      Height = 229
+      Align = alCustom
       DataSource = DsGrade
       TabOrder = 10
       TitleFont.Charset = DEFAULT_CHARSET
@@ -292,6 +293,7 @@ object FrmConsulta: TFrmConsulta
       TitleFont.Height = -11
       TitleFont.Name = 'Tahoma'
       TitleFont.Style = []
+      OnDblClick = GrdContasDblClick
       Columns = <
         item
           Expanded = False
@@ -302,19 +304,19 @@ object FrmConsulta: TFrmConsulta
         item
           Expanded = False
           FieldName = 'TIPO'
-          Width = 100
-          Visible = True
-        end
-        item
-          Expanded = False
-          FieldName = 'VALOR'
           Width = 90
           Visible = True
         end
         item
           Expanded = False
+          FieldName = 'VALOR'
+          Width = 80
+          Visible = True
+        end
+        item
+          Expanded = False
           FieldName = 'DESCRICAO'
-          Width = 291
+          Width = 110
           Visible = True
         end
         item
@@ -330,8 +332,8 @@ object FrmConsulta: TFrmConsulta
         end>
     end
     object BtnConsultar: TButton
-      Left = 566
-      Top = 105
+      Left = 324
+      Top = 127
       Width = 75
       Height = 25
       Caption = 'CONSULTAR'
@@ -345,15 +347,15 @@ object FrmConsulta: TFrmConsulta
       OnClick = BtnConsultarClick
     end
     object grpGbFixas: TGroupBox
-      Left = 17
-      Top = 239
-      Width = 705
-      Height = 141
+      Left = 486
+      Top = 26
+      Width = 239
+      Height = 473
       Caption = 'CONTAS FIXAS VARI'#193'VEIS'
       TabOrder = 5
       object GbAgua: TGroupBox
-        Left = 242
-        Top = 22
+        Left = 10
+        Top = 130
         Width = 220
         Height = 110
         Caption = #193'GUA'
@@ -418,8 +420,8 @@ object FrmConsulta: TFrmConsulta
         end
       end
       object GbLuz: TGroupBox
-        Left = 9
-        Top = 22
+        Left = 10
+        Top = 18
         Width = 220
         Height = 110
         Caption = 'LUZ'
@@ -484,8 +486,8 @@ object FrmConsulta: TFrmConsulta
         end
       end
       object GbInternet: TGroupBox
-        Left = 475
-        Top = 22
+        Left = 11
+        Top = 242
         Width = 220
         Height = 110
         Caption = 'INTERNET'
@@ -549,10 +551,76 @@ object FrmConsulta: TFrmConsulta
           OnClick = BtnSalvarInternetClick
         end
       end
+      object GroupBox1: TGroupBox
+        Left = 11
+        Top = 356
+        Width = 220
+        Height = 110
+        Caption = 'TELEFONE'
+        TabOrder = 3
+        object LblValorTelefone: TLabel
+          Left = 15
+          Top = 24
+          Width = 39
+          Height = 16
+          Caption = 'Valor:'
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -13
+          Font.Name = 'Tahoma'
+          Font.Style = [fsBold]
+          ParentFont = False
+        end
+        object LblVencimentoTelefone: TLabel
+          Left = 16
+          Top = 50
+          Width = 81
+          Height = 16
+          Caption = 'Vencimento:'
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -13
+          Font.Name = 'Tahoma'
+          Font.Style = [fsBold]
+          ParentFont = False
+        end
+        object CpoValorTelefone: TEdit
+          Left = 64
+          Top = 22
+          Width = 133
+          Height = 21
+          NumbersOnly = True
+          TabOrder = 0
+        end
+        object CpoVencimentoTelefone: TDateTimePicker
+          Left = 105
+          Top = 49
+          Width = 92
+          Height = 21
+          Date = 43420.483108935190000000
+          Time = 43420.483108935190000000
+          TabOrder = 1
+        end
+        object BtnSalvarTelefone: TButton
+          Left = 122
+          Top = 75
+          Width = 75
+          Height = 25
+          Caption = 'SALVAR'
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -11
+          Font.Name = 'Tahoma'
+          Font.Style = [fsBold]
+          ParentFont = False
+          TabOrder = 2
+          OnClick = BtnSalvarTelefoneClick
+        end
+      end
     end
     object BtnLimpar: TButton
-      Left = 647
-      Top = 105
+      Left = 405
+      Top = 127
       Width = 75
       Height = 25
       Caption = 'LIMPAR'
@@ -567,7 +635,7 @@ object FrmConsulta: TFrmConsulta
     end
     object CpoAno: TSpinEdit
       Left = 80
-      Top = 97
+      Top = 105
       Width = 57
       Height = 22
       MaxValue = 0
@@ -577,7 +645,7 @@ object FrmConsulta: TFrmConsulta
     end
     object CpoMes: TSpinEdit
       Left = 16
-      Top = 97
+      Top = 105
       Width = 57
       Height = 22
       MaxValue = 12
@@ -585,20 +653,22 @@ object FrmConsulta: TFrmConsulta
       TabOrder = 3
       Value = 1
     end
-  end
-  object CpoSalario: TEdit
-    Left = 91
-    Top = 47
-    Width = 121
-    Height = 21
-    NumbersOnly = True
-    TabOrder = 1
+    object CpoSalario: TMaskEdit
+      Left = 93
+      Top = 57
+      Width = 110
+      Height = 21
+      EditMask = '#,##0.00;0;_'
+      MaxLength = 8
+      TabOrder = 11
+      Text = ''
+    end
   end
   object CdsGrade: TClientDataSet
     Aggregates = <>
     Params = <>
-    Left = 624
-    Top = 405
+    Left = 360
+    Top = 381
     object CdsGradeNUM_PARCELA: TIntegerField
       FieldName = 'PARCELA'
     end
@@ -620,30 +690,33 @@ object FrmConsulta: TFrmConsulta
     object CdsGradeVENCIMENTO: TStringField
       FieldName = 'VENCIMENTO'
     end
+    object CdsGradeID_PARCELA: TIntegerField
+      FieldName = 'ID_PARCELA'
+    end
   end
   object QrGrade: TFDQuery
     Connection = DataModule1.FDConn
-    Left = 675
-    Top = 405
+    Left = 411
+    Top = 381
   end
   object DsGrade: TDataSource
     DataSet = CdsGrade
-    Left = 625
-    Top = 453
+    Left = 361
+    Top = 429
   end
   object QrConsulta: TFDQuery
     Connection = DataModule1.FDConn
-    Left = 675
-    Top = 453
+    Left = 411
+    Top = 429
   end
   object QrCadastra: TFDQuery
     Connection = DataModule1.FDConn
-    Left = 571
-    Top = 453
+    Left = 307
+    Top = 429
   end
   object QrFixas: TFDQuery
     Connection = DataModule1.FDConn
-    Left = 571
-    Top = 405
+    Left = 307
+    Top = 381
   end
 end

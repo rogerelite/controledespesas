@@ -97,11 +97,13 @@ begin
   QrIdConta.SQL.Text :=
     'SELECT MAX(ID_CONTA) AS COD FROM conta';
   QrIdConta.Open;
-  iIdConta                   := QrIdConta.FieldByName('COD').AsInteger + 1;
-  LbId.Caption               := IntToStr(iIdConta);
+  iIdConta                    := QrIdConta.FieldByName('COD').AsInteger + 1;
+  LbId.Caption                := IntToStr(iIdConta);
   QrIdConta.Close;
-  CpoVencimentoUnico.Enabled := False;
-  CpoDiaVencimento.Enabled   := False;
+  CpoVencimentoUnico.Enabled  := False;
+  CpoVencimentoUnico.Date     := Date;
+  CpoVencimentoParcelado.Date := Date;
+  CpoDiaVencimento.Enabled    := False;
   CpoDescricao.Clear;
   CpoTipoConta.Clear;
   CdsGrade.CreateDataSet;
@@ -177,13 +179,13 @@ begin
         '                   DESCRICAO,      '+
         '                   MODO_PGTO,      '+
         '                   VALOR,          '+
-        '                   ID_TIPOCONTA)   '+
+        '                   ID_CONTATIPO)   '+
         '            VALUES(:ID_PESSOA,     '+
         '                   :ID_PROCEDENTE, '+
         '                   :DESCRICAO,     '+
         '                   :MODO_PGTO,     '+
         '                   :VALOR,         '+
-        '                   :ID_TIPOCONTA)  ';
+        '                   :ID_CONTATIPO)  ';
       QrCadastraConta.ParamByName('ID_PESSOA').AsInteger     :=
         StrToInt(CpoIdTitular.Text);
       QrCadastraConta.ParamByName('ID_PROCEDENTE').AsInteger :=
@@ -194,7 +196,7 @@ begin
         sModoPagamento;
       QrCadastraConta.ParamByName('VALOR').AsCurrency        :=
         StrToCurr(CpoValorConta.Text);
-      QrCadastraConta.ParamByName('ID_TIPOCONTA').AsInteger  :=
+      QrCadastraConta.ParamByName('ID_CONTATIPO').AsInteger  :=
         StrToInt(CpoIdTipoConta.Text);
       QrCadastraConta.ExecSQL;
 

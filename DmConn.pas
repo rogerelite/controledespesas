@@ -46,21 +46,25 @@ begin
 
   try
     FDConn.DriverName               := 'MySQL';
-    FDConn.Params.Add('127.0.0.1=' + StrHostName);
-    FDConn.Params.Add('controledespesas=' + StrDBName);
-    FDConn.Params.Add('root=' + StrDBUser);
-    FDConn.Params.Add('' + StrDBPass);
-    FDConn.Params.Add('3306=' + StrDBPort);
-    FDConn.LoginPrompt              := False;
-    FDConn.Connected                := True;
-    QrPessoa                        := TFDQuery.Create(Self);
-    QrPessoa.Connection             := FDConn;
-    QrTipoConta                     := TFDQuery.Create(Self);
-    QrTipoConta.Connection          := FDConn;
-    QrConsultaTipoContas            := TFDQuery.Create(Self);
-    QrConsultaTipoContas.Connection := FDConn;
-    QrParcela                       := TFDQuery.Create(Self);
-    QrParcela.Connection            := FDConn;
+//    FDConn.Params.Add('127.0.0.1=' + StrHostName);
+//    FDConn.Params.Add('controledespesas=' + StrDBName);
+//    FDConn.Params.Add('root=' + StrDBUser);
+//    FDConn.Params.Add('' + StrDBPass);
+//    FDConn.Params.Add('https://databases-auth.000webhost.com/db_structure.php?db=id8575239_controledespesas&token=07649b51b1ebd4700d9e03469968d5e0=' + StrHostName);
+//    FDConn.Params.Add('id8575239_controledespesas=' + StrDBName);
+//    FDConn.Params.Add('id8575239_roger=' + StrDBUser);
+//    FDConn.Params.Add('Roger1986' + StrDBPass);
+//    FDConn.Params.Add('3306=' + StrDBPort);
+//    FDConn.LoginPrompt              := False;
+//    FDConn.Connected                := True;
+//    QrPessoa                        := TFDQuery.Create(Self);
+//    QrPessoa.Connection             := FDConn;
+//    QrTipoConta                     := TFDQuery.Create(Self);
+//    QrTipoConta.Connection          := FDConn;
+//    QrConsultaTipoContas            := TFDQuery.Create(Self);
+//    QrConsultaTipoContas.Connection := FDConn;
+//    QrParcela                       := TFDQuery.Create(Self);
+//    QrParcela.Connection            := FDConn;
     FDGUIxWaitCursor1.ScreenCursor  := gcrNone;
   except
     //

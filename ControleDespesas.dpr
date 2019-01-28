@@ -15,7 +15,8 @@ uses
   UnConsultaTipoConta in 'UnConsultaTipoConta.pas' {FrmConsultaTipoConta},
   UnConsultaProcedente in 'UnConsultaProcedente.pas' {FrmConsultaProcedente},
   UnCadastrarProcedente in 'UnCadastrarProcedente.pas' {FrmCadastrarProcedente},
-  UnConfigurarProcedente in 'UnConfigurarProcedente.pas' {FrmConfigurarProcedente};
+  UnConfigurarProcedente in 'UnConfigurarProcedente.pas' {FrmConfigurarProcedente},
+  UnPagarConta in 'UnPagarConta.pas' {FrmPagarConta};
 
 {$R *.res}
 
@@ -36,5 +37,6 @@ begin
   Application.CreateForm(TFrmConsultaProcedente, FrmConsultaProcedente);
   Application.CreateForm(TFrmCadastrarProcedente, FrmCadastrarProcedente);
   Application.CreateForm(TFrmConfigurarProcedente, FrmConfigurarProcedente);
+  Application.CreateForm(TFrmPagarConta, FrmPagarConta);
   Application.Run;
 end.

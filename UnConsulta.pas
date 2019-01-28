@@ -8,7 +8,8 @@ uses
   Vcl.Grids, Vcl.DBGrids, FireDAC.Stan.Intf, FireDAC.Stan.Option,
   FireDAC.Stan.Param, FireDAC.Stan.Error, FireDAC.DatS, FireDAC.Phys.Intf,
   FireDAC.DApt.Intf, FireDAC.Stan.Async, FireDAC.DApt, FireDAC.Comp.DataSet,
-  FireDAC.Comp.Client, Datasnap.DBClient, Vcl.Samples.Spin, Vcl.ComCtrls, System.DateUtils;
+  FireDAC.Comp.Client, Datasnap.DBClient, Vcl.Samples.Spin, Vcl.ComCtrls, System.DateUtils,
+  Vcl.Mask;
 
 type
   TFrmConsulta = class(TForm)
@@ -44,7 +45,6 @@ type
     CpoIdPessoa: TEdit;
     GrdContas: TDBGrid;
     BtnConsultar: TButton;
-    CpoSalario: TEdit;
     QrConsulta: TFDQuery;
     grpGbFixas: TGroupBox;
     GbAgua: TGroupBox;
@@ -72,6 +72,14 @@ type
     CpoMes: TSpinEdit;
     QrFixas: TFDQuery;
     CdsGradeVENCIMENTO: TStringField;
+    GroupBox1: TGroupBox;
+    LblValorTelefone: TLabel;
+    LblVencimentoTelefone: TLabel;
+    CpoValorTelefone: TEdit;
+    CpoVencimentoTelefone: TDateTimePicker;
+    BtnSalvarTelefone: TButton;
+    CdsGradeID_PARCELA: TIntegerField;
+    CpoSalario: TMaskEdit;
     procedure FormShow(Sender: TObject);
     procedure BtnBuscarClick(Sender: TObject);
     procedure BtnConsultarClick(Sender: TObject);
@@ -83,6 +91,8 @@ type
     procedure CpoAtrasadasClick(Sender: TObject);
     procedure CpoEmDiaClick(Sender: TObject);
     procedure CpoPagasClick(Sender: TObject);
+    procedure BtnSalvarTelefoneClick(Sender: TObject);
+    procedure GrdContasDblClick(Sender: TObject);
   private
     function CalculaSaldo: Currency;
     function CalculaTotalContas: Currency;
@@ -102,7 +112,7 @@ implementation
 
 {$R *.dfm}
 
-uses UnConsultaPessoa;
+uses UnConsultaPessoa, UnPagarConta;
 
 procedure TFrmConsulta.BtnBuscarClick(Sender: TObject);
 begin
@@ -118,7 +128,7 @@ end;
 procedure TFrmConsulta.BtnConsultarClick(Sender: TObject);
 var
   cTotalContas : Currency;
-  bLuz, bAgua, bInternet : Boolean;
+  bLuz, bAgua, bInternet, bTelefone : Boolean;
 begin
   CdsGrade.EmptyDataSet;
 
@@ -141,6 +151,7 @@ begin
   bLuz      := False;
   bAgua     := False;
   bInternet := False;
+  bTelefone := False;
 
   QrFixas.Close;
   QrFixas.SQL.Text :=
@@ -165,6 +176,10 @@ begin
     if (QrFixas.FieldByName('NOME').AsString = 'Internet') then
     begin
       bInternet := True;
+    end;
+    if (QrFixas.FieldByName('NOME').AsString = 'Telefone') then
+    begin
+      bTelefone := True;
     end;
     QrFixas.Next;
   end;
@@ -215,6 +230,22 @@ begin
     CpoVencimentoInternet.DateTime := Date;
     CpoVencimentoInternet.Enabled  := True;
     BtnSalvarInternet.Enabled      := True;
+  end;
+
+  if (bTelefone) then
+  begin
+    CpoValorTelefone.Enabled      := False;
+    CpoVencimentoTelefone.Enabled := False;
+    BtnSalvarTelefone.Enabled     := False;
+    ConsultaContasFixas(Sender);
+  end
+  else
+  begin
+    CpoValorTelefone.Clear;
+    CpoValorTelefone.Enabled       := True;
+    CpoVencimentoTelefone.DateTime := Date;
+    CpoVencimentoTelefone.Enabled  := True;
+    BtnSalvarTelefone.Enabled      := True;
   end;
 
   QrFixas.Close;
@@ -290,6 +321,26 @@ begin
   BtnConsultarClick(Sender);
 end;
 
+procedure TFrmConsulta.BtnSalvarTelefoneClick(Sender: TObject);
+begin
+  QrCadastra.Close;
+  QrCadastra.SQL.Text :=
+    ' INSERT INTO contafixa (NOME,        '+
+    '                        VALOR,       '+
+    '                        VENCIMENTO,  '+
+    '                        PAGO)        '+
+    '                VALUES (:NOME,       '+
+    '                        :VALOR,      '+
+    '                        :VENCIMENTO, '+
+    '                        :PAGO)       ';
+  QrCadastra.ParamByName('NOME').AsString     := 'Telefone';
+  QrCadastra.ParamByName('VALOR').AsCurrency  := StrToCurr(CpoValorTelefone.Text);
+  QrCadastra.ParamByName('VENCIMENTO').AsDate := CpoVencimentoTelefone.Date;
+  QrCadastra.ParamByName('PAGO').AsString     := 'N';
+  QrCadastra.ExecSQL;
+  BtnConsultarClick(Sender);
+end;
+
 function TFrmConsulta.CalculaSaldo : Currency;
 var
   cSalario, cTotalContas : Currency;
@@ -329,6 +380,7 @@ begin
   QrConsulta.Close;
   QrConsulta.SQL.Text :=
     '    SELECT c.DESCRICAO,                     '+
+    '          p.ID_PARCELA,                     '+
     '	         p.NUMERO,                         '+
     '	         P.VALOR,                          '+
     '	         p.VENCIMENTO,                     '+
@@ -366,11 +418,12 @@ begin
   while not QrConsulta.Eof do
   begin
     CdsGrade.Append;
+    CdsGradeID_PARCELA.AsInteger  := QrConsulta.FieldByName('ID_PARCELA').AsInteger;
     CdsGradeNUM_PARCELA.AsInteger := QrConsulta.FieldByName('NUMERO').AsInteger;
     CdsGradeTIPO_CONTA.AsString   := QrConsulta.FieldByName('NOME').AsString;
     CdsGradeVALOR.AsCurrency      := QrConsulta.FieldByName('VALOR').AsCurrency;
     CdsGradeDESCRICAO.AsString    := QrConsulta.FieldByName('DESCRICAO').AsString;
-    //CdsGradeVENCIMENTO.AsString := FormatDateTime('dd/mm/yyyy', QrConsulta.FieldByName('VENCIMENTO').AsDateTime);
+    CdsGradeVENCIMENTO.AsDateTime := QrConsulta.FieldByName('VENCIMENTO').AsDateTime;
     CdsGradePAGO.AsString         := QrConsulta.FieldByName('PAGO').AsString;
     CdsGrade.Post;
     QrConsulta.Next;
@@ -426,7 +479,24 @@ begin
   if (not QrConsulta.IsEmpty) then
   begin
     CpoValorInternet.Text      := CurrToStr(QrConsulta.FieldByName('VALOR').AsCurrency);
-    CpoVencimentointernet.Date := QrConsulta.FieldByName('VENCIMENTO').AsDateTime;
+    CpoVencimentoInternet.Date := QrConsulta.FieldByName('VENCIMENTO').AsDateTime;
+  end;
+  QrConsulta.Close;
+
+  QrConsulta.Close;
+  QrConsulta.SQL.Text :=
+    ' SELECT *                        '+
+    '   FROM contafixa                '+
+    '  WHERE MONTH(VENCIMENTO) = :MES '+
+    '    AND YEAR(VENCIMENTO) = :ANO  '+
+    '    AND NOME = ''Telefone''      ';
+  QrConsulta.ParamByName('MES').AsInteger := StrToInt(CpoMes.Text);
+  QrConsulta.ParamByName('ANO').AsInteger := StrToInt(CpoAno.Text);
+  QrConsulta.Open;
+  if (not QrConsulta.IsEmpty) then
+  begin
+    CpoValorTelefone.Text      := CurrToStr(QrConsulta.FieldByName('VALOR').AsCurrency);
+    CpoVencimentoTelefone.Date := QrConsulta.FieldByName('VENCIMENTO').AsDateTime;
   end;
   QrConsulta.Close;
 end;
@@ -454,7 +524,34 @@ begin
   CpoVencimentoLuz.DateTime      := Date;
   CpoVencimentoAgua.DateTime     := Date;
   CpoVencimentoInternet.DateTime := Date;
+  CpoVencimentoTelefone.DateTime := Date;
   CdsGrade.CreateDataSet;
+end;
+
+procedure TFrmConsulta.GrdContasDblClick(Sender: TObject);
+begin
+  if (CdsGradePAGO.AsString = 'N') then
+  begin
+    try
+      Application.CreateForm(TFrmPagarConta, FrmPagarConta);
+      FrmPagarConta.CpoIdParcela.Text     := IntToStr(CdsGradeID_PARCELA.AsInteger);
+      FrmPagarConta.CpoDescricao.Text     := CdsGradeDESCRICAO.AsString;
+      FrmPagarConta.CpoValor.Text         := CurrToStr(CdsGradeVALOR.AsCurrency);
+      FrmPagarConta.CpoVencimento.Date    := CdsGradeVENCIMENTO.AsDateTime;
+      FrmPagarConta.CpoIdParcela.Enabled  := False;
+      FrmPagarConta.CpoDescricao.Enabled  := False;
+      FrmPagarConta.CpoValor.Enabled      := False;
+      FrmPagarConta.CpoVencimento.Enabled := False;
+      FrmPagarConta.ShowModal;
+    finally
+      BtnConsultarClick(Sender);
+      FreeAndNil(FrmPagarConta);
+    end;
+  end
+  else
+  begin
+    ShowMessage('Essa conta já está paga.');
+  end;
 end;
 
 procedure TFrmConsulta.LimparCampos(Sender: TObject);
@@ -478,15 +575,19 @@ begin
   CpoValorLuz.Enabled            := True;
   CpoValorAgua.Enabled           := True;
   CpoValorInternet.Enabled       := True;
+  CpoValorTelefone.Enabled       := True;
   CpoVencimentoLuz.DateTime      := Date;
   CpoVencimentoAgua.DateTime     := Date;
   CpoVencimentoInternet.DateTime := Date;
+  CpoVencimentoTelefone.DateTime := Date;
   CpoVencimentoLuz.Enabled       := True;
   CpoVencimentoAgua.Enabled      := True;
   CpoVencimentoInternet.Enabled  := True;
+  CpoVencimentoTelefone.Enabled  := True;
   BtnSalvarLuz.Enabled           := True;
   BtnSalvarAgua.Enabled          := True;
   BtnSalvarInternet.Enabled      := True;
+  BtnSalvarTelefone.Enabled      := True;
   CdsGrade.EmptyDataSet;
 end;
 

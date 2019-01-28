@@ -25,7 +25,6 @@ object DataModule1: TDataModule1
       'User_Name=root'
       'Password='
       'DriverID=MySQL')
-    Connected = True
     LoginPrompt = False
     Left = 48
     Top = 16
