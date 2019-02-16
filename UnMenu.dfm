@@ -23,15 +23,16 @@ object FrmMenu: TFrmMenu
     Height = 217
     Align = alClient
     TabOrder = 0
-    ExplicitWidth = 684
-    ExplicitHeight = 551
   end
   object MainMenu: TMainMenu
     Left = 352
     Top = 56
     object Consulta: TMenuItem
       Caption = 'CONSULTA'
-      OnClick = ConsultaClick
+      object ConsDespesas: TMenuItem
+        Caption = 'CONSULTA DE DESPESAS'
+        OnClick = ConsDespesasClick
+      end
     end
     object Cadastro: TMenuItem
       Caption = 'CADASTRAR'

@@ -24,8 +24,6 @@ object FrmPagarConta: TFrmPagarConta
     Color = clWhite
     ParentBackground = False
     TabOrder = 0
-    ExplicitWidth = 393
-    ExplicitHeight = 135
     object LblDescricao: TLabel
       Left = 16
       Top = 16

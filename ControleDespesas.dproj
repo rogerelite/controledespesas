@@ -104,9 +104,6 @@
         <DCCReference Include="UnMenu.pas">
             <Form>FrmMenu</Form>
         </DCCReference>
-        <DCCReference Include="UnConsulta.pas">
-            <Form>FrmConsulta</Form>
-        </DCCReference>
         <DCCReference Include="UnCadastrarConta.pas">
             <Form>FrmCadastrarConta</Form>
         </DCCReference>
@@ -152,6 +149,10 @@
         </DCCReference>
         <DCCReference Include="UnPagarConta.pas">
             <Form>FrmPagarConta</Form>
+            <FormType>dfm</FormType>
+        </DCCReference>
+        <DCCReference Include="UnConsultaDespesas.pas">
+            <Form>FrmConsultaDespesas</Form>
             <FormType>dfm</FormType>
         </DCCReference>
         <BuildConfiguration Include="Release">

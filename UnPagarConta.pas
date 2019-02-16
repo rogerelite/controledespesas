@@ -47,28 +47,17 @@ begin
 end;
 
 procedure TFrmPagarConta.BtnPagarClick(Sender: TObject);
-var
-  dDataAtual : TDateTime;
 begin
-  dDataAtual := Date;
-  if (CpoDataPagemento.Date >= Date) then
-  begin
-    QrPagarConta.Close;
-    QrPagarConta.SQL.Text :=
-      ' UPDATE parcela                  '+
-      '    SET PAGO = ''S'',            '+
-      '        PAGAMENTO = :PAGAMENTO   '+
-      '  WHERE ID_PARCELA = :ID_PARCELA ';
-    QrPagarConta.ParamByName('ID_PARCELA').AsInteger := StrToInt(CpoIdParcela.Text);
-    QrPagarConta.ParamByName('PAGAMENTO').AsDate     := CpoDataPagemento.Date;
-    QrPagarConta.ExecSQL;
-    BtnFecharClick(Sender);
-  end
-  else
-  begin
-    ShowMessage('Data de pagamento não pode ser inferior a data atual.');
-    Abort;
-  end;
+  QrPagarConta.Close;
+  QrPagarConta.SQL.Text :=
+    ' UPDATE parcela                  '+
+    '    SET PAGO = ''S'',            '+
+    '        PAGAMENTO = :PAGAMENTO   '+
+    '  WHERE ID_PARCELA = :ID_PARCELA ';
+  QrPagarConta.ParamByName('ID_PARCELA').AsInteger := StrToInt(CpoIdParcela.Text);
+  QrPagarConta.ParamByName('PAGAMENTO').AsDate     := CpoDataPagemento.Date;
+  QrPagarConta.ExecSQL;
+  BtnFecharClick(Sender);
 end;
 
 procedure TFrmPagarConta.FormShow(Sender: TObject);

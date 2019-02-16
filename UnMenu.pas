@@ -25,7 +25,7 @@ type
     ConfConta: TMenuItem;
     PROCEDENTE1: TMenuItem;
     ConfProcedente: TMenuItem;
-    procedure ConsultaClick(Sender: TObject);
+    ConsDespesas: TMenuItem;
     procedure CadTipoContaClick(Sender: TObject);
     procedure CadPessoaClick(Sender: TObject);
     procedure CadContaClick(Sender: TObject);
@@ -35,6 +35,7 @@ type
     procedure BtnBuscarClick(Sender: TObject);
     procedure CadProcedenteClick(Sender: TObject);
     procedure ConfProcedenteClick(Sender: TObject);
+    procedure ConsDespesasClick(Sender: TObject);
   private
     { Private declarations }
   public
@@ -51,7 +52,7 @@ implementation
 
 uses UnConsulta, UnConsultaPessoa, UnConfigurarConta, UnConfigurarPessoa, UnConfigurarTipoConta,
   UnCadastrarConta, UnCadastrarPessoa, UnCadastrarTipoConta,
-  UnCadastrarProcedente, UnConfigurarProcedente;
+  UnCadastrarProcedente, UnConfigurarProcedente, UnConsultaDespesas;
 
 procedure TFrmMenu.ConfContaClick(Sender: TObject);
 begin
@@ -77,10 +78,10 @@ begin
   FrmConfigurarTipoConta.Show;
 end;
 
-procedure TFrmMenu.ConsultaClick(Sender: TObject);
+procedure TFrmMenu.ConsDespesasClick(Sender: TObject);
 begin
-  Application.CreateForm(TFrmConsulta, FrmConsulta);
-  FrmConsulta.Show;
+  Application.CreateForm(TFrmConsultaDespesas, FrmConsultaDespesas);
+  FrmConsultaDespesas.Show;
 end;
 
 procedure TFrmMenu.CadProcedenteClick(Sender: TObject);
