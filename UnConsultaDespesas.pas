@@ -9,7 +9,7 @@ uses
   FireDAC.Stan.Param, FireDAC.Stan.Error, FireDAC.DatS, FireDAC.Phys.Intf,
   FireDAC.DApt.Intf, FireDAC.Stan.Async, FireDAC.DApt, FireDAC.Comp.DataSet,
   FireDAC.Comp.Client, Datasnap.DBClient, Vcl.Samples.Spin, Vcl.ComCtrls, System.DateUtils,
-  Vcl.Mask;
+  Vcl.Mask, Vcl.DBCtrls;
 
 type
   TFrmConsultaDespesas = class(TForm)
@@ -66,7 +66,6 @@ type
     BtnLimpar: TButton;
     CpoAno: TSpinEdit;
     CpoMes: TSpinEdit;
-    CpoSalario: TMaskEdit;
     QrFixas: TFDQuery;
     CdsGrade: TClientDataSet;
     CdsGradeNUM_PARCELA: TIntegerField;
@@ -80,6 +79,7 @@ type
     QrCadastra: TFDQuery;
     DsGrade: TDataSource;
     QrConsulta: TFDQuery;
+    CpoSalario: TEdit;
     procedure BtnBuscarClick(Sender: TObject);
     procedure CpoSalarioClick(Sender: TObject);
     procedure BtnConsultarClick(Sender: TObject);
@@ -133,11 +133,6 @@ var
 begin
   CdsGrade.EmptyDataSet;
 
-  if (CpoNome.Text = '') then
-  begin
-    ShowMessage('Selecione uma pessoa.');
-    Abort;
-  end;
   if (CpoMes.Value = 0) then
   begin
     ShowMessage('Digite o mês.');
@@ -416,12 +411,16 @@ begin
     '        ON p.ID_CONTA = c.ID_CONTA          '+
     ' LEFT JOIN contatipo ct                     '+
     '        ON ct.ID_CONTATIPO = c.ID_CONTATIPO '+
-    '     WHERE c.ID_PESSOA = :ID_PESSOA         '+
-    '       AND MONTH(VENCIMENTO) = :MES         '+
+    '     WHERE MONTH(VENCIMENTO) = :MES         '+
     '       AND YEAR(VENCIMENTO) = :ANO          ';
-  QrConsulta.ParamByName('ID_PESSOA').AsInteger := StrToInt(CpoIdPessoa.Text);
   QrConsulta.ParamByName('MES').AsInteger       := CpoMes.Value;
   QrConsulta.ParamByName('ANO').AsInteger       := CpoAno.Value;
+
+  if (CpoNome.Text <> '') then
+  begin
+    QrConsulta.SQL.Add(' AND c.ID_PESSOA = :ID_PESSOA ');
+    QrConsulta.ParamByName('ID_PESSOA').AsInteger := StrToInt(CpoIdPessoa.Text);
+  end;
 
   if (CpoAtrasadas.Checked) then
   begin

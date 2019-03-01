@@ -128,23 +128,9 @@ object FrmCadastrarConta: TFrmCadastrarConta
       Font.Style = [fsBold]
       ParentFont = False
     end
-    object LbId: TLabel
-      Left = 154
-      Top = 24
-      Width = 103
-      Height = 16
-      AutoSize = False
-      Caption = 'Id da conta'
-      Font.Charset = DEFAULT_CHARSET
-      Font.Color = clWindowText
-      Font.Height = -13
-      Font.Name = 'Tahoma'
-      Font.Style = [fsBold, fsItalic]
-      ParentFont = False
-    end
     object IdConta: TLabel
       Left = 26
-      Top = 24
+      Top = 20
       Width = 19
       Height = 16
       Caption = 'ID:'
@@ -329,7 +315,7 @@ object FrmCadastrarConta: TFrmCadastrarConta
       end
     end
     object BtnSalvar: TButton
-      Left = 629
+      Left = 557
       Top = 452
       Width = 75
       Height = 25
@@ -449,53 +435,76 @@ object FrmCadastrarConta: TFrmCadastrarConta
       TabOrder = 12
       Visible = False
     end
-  end
-  object BtnBuscarTipoConta: TButton
-    Left = 151
-    Top = 77
-    Width = 75
-    Height = 25
-    Caption = 'BUSCAR'
-    Font.Charset = DEFAULT_CHARSET
-    Font.Color = clWindowText
-    Font.Height = -11
-    Font.Name = 'Tahoma'
-    Font.Style = [fsBold]
-    ParentFont = False
-    TabOrder = 1
-    OnClick = BtnBuscarTipoContaClick
-  end
-  object CpoTipoConta: TEdit
-    Left = 226
-    Top = 79
-    Width = 191
-    Height = 21
-    Enabled = False
-    ReadOnly = True
-    TabOrder = 2
-  end
-  object BtnBuscarProcedente: TButton
-    Left = 151
-    Top = 109
-    Width = 75
-    Height = 25
-    Caption = 'BUSCAR'
-    Font.Charset = DEFAULT_CHARSET
-    Font.Color = clWindowText
-    Font.Height = -11
-    Font.Name = 'Tahoma'
-    Font.Style = [fsBold]
-    ParentFont = False
-    TabOrder = 3
-    OnClick = BtnBuscarProcedenteClick
-  end
-  object CpoProcedente: TEdit
-    Left = 226
-    Top = 111
-    Width = 191
-    Height = 21
-    Enabled = False
-    TabOrder = 4
+    object BtnBuscarTipoConta: TButton
+      Left = 151
+      Top = 77
+      Width = 75
+      Height = 25
+      Caption = 'BUSCAR'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'Tahoma'
+      Font.Style = [fsBold]
+      ParentFont = False
+      TabOrder = 13
+      OnClick = BtnBuscarTipoContaClick
+    end
+    object CpoTipoConta: TEdit
+      Left = 226
+      Top = 79
+      Width = 191
+      Height = 21
+      Enabled = False
+      ReadOnly = True
+      TabOrder = 14
+    end
+    object BtnBuscarProcedente: TButton
+      Left = 151
+      Top = 109
+      Width = 75
+      Height = 25
+      Caption = 'BUSCAR'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'Tahoma'
+      Font.Style = [fsBold]
+      ParentFont = False
+      TabOrder = 15
+      OnClick = BtnBuscarProcedenteClick
+    end
+    object CpoProcedente: TEdit
+      Left = 226
+      Top = 111
+      Width = 191
+      Height = 21
+      Enabled = False
+      TabOrder = 16
+    end
+    object CpoIdConta: TEdit
+      Left = 152
+      Top = 19
+      Width = 45
+      Height = 21
+      TabOrder = 17
+      OnExit = CpoIdContaExit
+    end
+    object BtnCancelar: TButton
+      Left = 637
+      Top = 452
+      Width = 75
+      Height = 25
+      Caption = 'CANCELAR'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'Tahoma'
+      Font.Style = [fsBold]
+      ParentFont = False
+      TabOrder = 18
+      OnClick = BtnCancelarClick
+    end
   end
   object QrIdConta: TFDQuery
     Connection = DataModule1.FDConn
@@ -504,7 +513,7 @@ object FrmCadastrarConta: TFrmCadastrarConta
   end
   object QrCadastraConta: TFDQuery
     Connection = DataModule1.FDConn
-    Left = 304
+    Left = 317
     Top = 328
   end
   object QrGrade: TFDQuery
@@ -533,12 +542,17 @@ object FrmCadastrarConta: TFrmCadastrarConta
   end
   object DsGrade: TDataSource
     DataSet = CdsGrade
-    Left = 320
+    Left = 308
     Top = 392
   end
   object QrCadastraParcela: TFDQuery
     Connection = DataModule1.FDConn
     Left = 381
     Top = 392
+  end
+  object QrConsulta: TFDQuery
+    Connection = DataModule1.FDConn
+    Left = 373
+    Top = 264
   end
 end

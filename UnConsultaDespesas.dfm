@@ -649,16 +649,12 @@ object FrmConsultaDespesas: TFrmConsultaDespesas
       TabOrder = 3
       Value = 1
     end
-    object CpoSalario: TMaskEdit
-      Left = 93
+    object CpoSalario: TEdit
+      Left = 91
       Top = 57
-      Width = 106
+      Width = 121
       Height = 21
-      EditMask = '#.##0,00;0;_'
-      MaxLength = 8
       TabOrder = 11
-      Text = ''
-      OnClick = CpoSalarioClick
     end
   end
   object QrFixas: TFDQuery

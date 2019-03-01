@@ -8,7 +8,6 @@ uses
   UnCadastrarPessoa in 'UnCadastrarPessoa.pas' {FrmCadastrarPessoa},
   UnConfigurarTipoConta in 'UnConfigurarTipoConta.pas' {FrmConfigurarTipoConta},
   UnConfigurarPessoa in 'UnConfigurarPessoa.pas' {FrmConfigurarPessoa},
-  UnConfigurarConta in 'UnConfigurarConta.pas' {FrmConfigurarConta},
   DmConn in 'DmConn.pas' {DataModule1: TDataModule},
   UnConsultaPessoa in 'UnConsultaPessoa.pas' {FrmConsultaPessoa},
   UnConsultaTipoConta in 'UnConsultaTipoConta.pas' {FrmConsultaTipoConta},
@@ -29,7 +28,6 @@ begin
   Application.CreateForm(TFrmCadastrarPessoa, FrmCadastrarPessoa);
   Application.CreateForm(TFrmConfigurarTipoConta, FrmConfigurarTipoConta);
   Application.CreateForm(TFrmConfigurarPessoa, FrmConfigurarPessoa);
-  Application.CreateForm(TFrmConfigurarConta, FrmConfigurarConta);
   Application.CreateForm(TDataModule1, DataModule1);
   Application.CreateForm(TFrmConsultaPessoa, FrmConsultaPessoa);
   Application.CreateForm(TFrmConsultaTipoConta, FrmConsultaTipoConta);

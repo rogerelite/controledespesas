@@ -119,9 +119,6 @@
         <DCCReference Include="UnConfigurarPessoa.pas">
             <Form>FrmConfigurarPessoa</Form>
         </DCCReference>
-        <DCCReference Include="UnConfigurarConta.pas">
-            <Form>FrmConfigurarConta</Form>
-        </DCCReference>
         <DCCReference Include="DmConn.pas">
             <Form>DataModule1</Form>
             <FormType>dfm</FormType>

@@ -63,10 +63,6 @@ object FrmMenu: TFrmMenu
         Caption = 'PESSOA'
         OnClick = ConfPessoaClick
       end
-      object ConfConta: TMenuItem
-        Caption = 'CONTA'
-        OnClick = ConfContaClick
-      end
       object ConfProcedente: TMenuItem
         Caption = 'PROCEDENTE'
         OnClick = ConfProcedenteClick

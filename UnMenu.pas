@@ -22,7 +22,6 @@ type
     Configurar: TMenuItem;
     ConfTipoConta: TMenuItem;
     ConfPessoa: TMenuItem;
-    ConfConta: TMenuItem;
     PROCEDENTE1: TMenuItem;
     ConfProcedente: TMenuItem;
     ConsDespesas: TMenuItem;
@@ -52,7 +51,8 @@ implementation
 
 uses UnConsulta, UnConsultaPessoa, UnConfigurarConta, UnConfigurarPessoa, UnConfigurarTipoConta,
   UnCadastrarConta, UnCadastrarPessoa, UnCadastrarTipoConta,
-  UnCadastrarProcedente, UnConfigurarProcedente, UnConsultaDespesas;
+  UnCadastrarProcedente, UnConfigurarProcedente, UnConsultaDespesas,
+  UnConsultaConta;
 
 procedure TFrmMenu.ConfContaClick(Sender: TObject);
 begin
