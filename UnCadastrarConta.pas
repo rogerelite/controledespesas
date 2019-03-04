@@ -76,6 +76,7 @@ type
     procedure BtnBuscarProcedenteClick(Sender: TObject);
     procedure CpoIdContaExit(Sender: TObject);
     procedure BtnCancelarClick(Sender: TObject);
+    procedure GrdParcelasDblClick(Sender: TObject);
   private
     procedure ConsultaConta(Sender: TObject);
     procedure CarregaUltimoId(Sender: TObject);
@@ -87,9 +88,10 @@ type
 
 var
   FrmCadastrarConta: TFrmCadastrarConta;
-  bParcelado, bAbriuPorCadastroConta : boolean;
-  iIdConta   : Integer;
-  sModoPagamento : String;
+  bParcelado,
+  bAbriuPorCadastroConta  : boolean;
+  iIdConta                : Integer;
+  sModoPagamento          : String;
 
 implementation
 
@@ -121,13 +123,21 @@ end;
 
 procedure TFrmCadastrarConta.BtnAdicionarClick(Sender: TObject);
 begin
-  CdsGrade.Append;
+  if (CdsGrade.Locate('NUMERO', CpoNumeroParcela.Value,[])) then
+  begin
+    CdsGrade.Edit;
+  end
+  else
+  begin
+    CdsGrade.Append;
+  end;
   CdsGradeNUMERO.AsInteger        := CpoNumeroParcela.Value;
   CdsGradeVALOR.AsCurrency        := StrToCurr(CpoValorParcela.Text);
   CdsGradeVENC_PARCELA.AsDateTime := CpoVencimentoParcelado.DateTime;
   CdsGradePAGO.AsString           := CpoPago.Text;
   CdsGrade.Post;
   CpoNumeroParcela.Value := CpoNumeroParcela.Value + 1;
+  CpoValorParcela.Clear;
 end;
 
 procedure TFrmCadastrarConta.BtnBuscarNomeClick(Sender: TObject);
@@ -168,6 +178,7 @@ begin
   LimpaCampos(Sender);
   CarregaUltimoId(Sender);
   CpoIdConta.Enabled := True;
+  CpoIdConta.SetFocus;
 end;
 
 procedure TFrmCadastrarConta.BtnFecharClick(Sender: TObject);
@@ -360,6 +371,13 @@ begin
   end;
 end;
 
+procedure TFrmCadastrarConta.GrdParcelasDblClick(Sender: TObject);
+begin
+  CpoNumeroParcela.Value      := CdsGradeNUMERO.AsInteger;
+  CpoValorParcela.Text        := CurrToStr(CdsGradeVALOR.AsCurrency);
+  CpoVencimentoParcelado.Date := CdsGradeVENC_PARCELA.AsDateTime;
+end;
+
 procedure TFrmCadastrarConta.GrpModoPagamentoClick(Sender: TObject);
 begin
   case GrpModoPagamento.ItemIndex of
@@ -371,6 +389,8 @@ begin
       CpoVencimentoUnico.Enabled     := False;
       BtnAdicionar.Enabled           := True;
       CpoDiaVencimento.Enabled       := False;
+      BtnRemover.Enabled             := True;
+      GrdParcelas.Enabled            := True;
     end;
     1:begin
       bParcelado                     := False;
@@ -380,6 +400,8 @@ begin
       CpoVencimentoUnico.Enabled     := True;
       BtnAdicionar.Enabled           := False;
       CpoDiaVencimento.Enabled       := False;
+      BtnRemover.Enabled             := False;
+      GrdParcelas.Enabled            := False;
     end;
     2:begin
       bParcelado                     := False;
@@ -389,6 +411,8 @@ begin
       CpoVencimentoUnico.Enabled     := False;
       BtnAdicionar.Enabled           := False;
       CpoDiaVencimento.Enabled       := True;
+      BtnRemover.Enabled             := False;
+      GrdParcelas.Enabled            := False;
     end;
   end;
 end;

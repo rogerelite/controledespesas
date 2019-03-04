@@ -236,6 +236,7 @@ object FrmCadastrarConta: TFrmCadastrarConta
         TitleFont.Height = -11
         TitleFont.Name = 'Tahoma'
         TitleFont.Style = []
+        OnDblClick = GrdParcelasDblClick
         Columns = <
           item
             Expanded = False
