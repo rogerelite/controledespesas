@@ -316,7 +316,7 @@ object FrmCadastrarConta: TFrmCadastrarConta
       end
     end
     object BtnSalvar: TButton
-      Left = 557
+      Left = 476
       Top = 452
       Width = 75
       Height = 25
@@ -505,6 +505,20 @@ object FrmCadastrarConta: TFrmCadastrarConta
       ParentFont = False
       TabOrder = 18
       OnClick = BtnCancelarClick
+    end
+    object BtnExcluir: TButton
+      Left = 556
+      Top = 452
+      Width = 75
+      Height = 25
+      Caption = 'EXCLUIR'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'Tahoma'
+      Font.Style = [fsBold]
+      ParentFont = False
+      TabOrder = 19
     end
   end
   object QrIdConta: TFDQuery
