@@ -152,6 +152,14 @@
             <Form>FrmConsultaDespesas</Form>
             <FormType>dfm</FormType>
         </DCCReference>
+        <DCCReference Include="UnConfigurarSistema.pas">
+            <Form>FrmConfigurarSistema</Form>
+            <FormType>dfm</FormType>
+        </DCCReference>
+        <DCCReference Include="UnFuncoes.pas">
+            <Form>FrmFuncoes</Form>
+            <FormType>dfm</FormType>
+        </DCCReference>
         <BuildConfiguration Include="Release">
             <Key>Cfg_2</Key>
             <CfgParent>Base</CfgParent>

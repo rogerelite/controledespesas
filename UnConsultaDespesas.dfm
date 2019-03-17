@@ -3,7 +3,7 @@ object FrmConsultaDespesas: TFrmConsultaDespesas
   Top = 0
   Caption = 'CONSULTA DE DESPESAS'
   ClientHeight = 505
-  ClientWidth = 742
+  ClientWidth = 498
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -18,13 +18,12 @@ object FrmConsultaDespesas: TFrmConsultaDespesas
   object PaConteudo: TPanel
     Left = 0
     Top = 0
-    Width = 742
+    Width = 498
     Height = 505
     Align = alClient
     Color = clWhite
     ParentBackground = False
     TabOrder = 0
-    ExplicitLeft = 8
     object LblSalario: TLabel
       Left = 17
       Top = 59
@@ -39,7 +38,7 @@ object FrmConsultaDespesas: TFrmConsultaDespesas
       ParentFont = False
     end
     object LblData: TLabel
-      Left = 641
+      Left = 397
       Top = 8
       Width = 82
       Height = 16
@@ -83,7 +82,7 @@ object FrmConsultaDespesas: TFrmConsultaDespesas
       Width = 192
       Height = 95
       Caption = 'FILTRO'
-      TabOrder = 9
+      TabOrder = 8
       object CpoAtrasadas: TCheckBox
         Left = 11
         Top = 24
@@ -118,7 +117,7 @@ object FrmConsultaDespesas: TFrmConsultaDespesas
       Width = 463
       Height = 102
       Caption = 'TOTAIS'
-      TabOrder = 8
+      TabOrder = 7
       object LblSaldo: TLabel
         Left = 15
         Top = 19
@@ -255,7 +254,7 @@ object FrmConsultaDespesas: TFrmConsultaDespesas
       Top = 24
       Width = 75
       Height = 25
-      Caption = 'BUSCAR'
+      Caption = 'TITULAR'
       Font.Charset = DEFAULT_CHARSET
       Font.Color = clWindowText
       Font.Height = -11
@@ -281,13 +280,13 @@ object FrmConsultaDespesas: TFrmConsultaDespesas
       Visible = False
     end
     object GrdContas: TDBGrid
-      Left = 1
+      Left = 9
       Top = 268
       Width = 479
       Height = 229
       Align = alCustom
       DataSource = DsGrade
-      TabOrder = 10
+      TabOrder = 9
       TitleFont.Charset = DEFAULT_CHARSET
       TitleFont.Color = clWindowText
       TitleFont.Height = -11
@@ -343,276 +342,8 @@ object FrmConsultaDespesas: TFrmConsultaDespesas
       Font.Name = 'Tahoma'
       Font.Style = [fsBold]
       ParentFont = False
-      TabOrder = 6
-      OnClick = BtnConsultarClick
-    end
-    object grpGbFixas: TGroupBox
-      Left = 486
-      Top = 26
-      Width = 239
-      Height = 473
-      Caption = 'CONTAS FIXAS VARI'#193'VEIS'
       TabOrder = 5
-      object GbAgua: TGroupBox
-        Left = 10
-        Top = 130
-        Width = 220
-        Height = 110
-        Caption = #193'GUA'
-        TabOrder = 1
-        object LblValorAgua: TLabel
-          Left = 15
-          Top = 24
-          Width = 39
-          Height = 16
-          Caption = 'Valor:'
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clWindowText
-          Font.Height = -13
-          Font.Name = 'Tahoma'
-          Font.Style = [fsBold]
-          ParentFont = False
-        end
-        object LblVencimentoAgua: TLabel
-          Left = 16
-          Top = 50
-          Width = 81
-          Height = 16
-          Caption = 'Vencimento:'
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clWindowText
-          Font.Height = -13
-          Font.Name = 'Tahoma'
-          Font.Style = [fsBold]
-          ParentFont = False
-        end
-        object CpoValorAgua: TEdit
-          Left = 64
-          Top = 22
-          Width = 133
-          Height = 21
-          TabOrder = 0
-        end
-        object CpoVencimentoAgua: TDateTimePicker
-          Left = 105
-          Top = 49
-          Width = 92
-          Height = 21
-          Date = 43420.483108935190000000
-          Time = 43420.483108935190000000
-          TabOrder = 1
-        end
-        object BtnSalvarAgua: TButton
-          Left = 122
-          Top = 75
-          Width = 75
-          Height = 25
-          Caption = 'SALVAR'
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clWindowText
-          Font.Height = -11
-          Font.Name = 'Tahoma'
-          Font.Style = [fsBold]
-          ParentFont = False
-          TabOrder = 2
-          OnClick = BtnSalvarAguaClick
-        end
-      end
-      object GbLuz: TGroupBox
-        Left = 10
-        Top = 18
-        Width = 220
-        Height = 110
-        Caption = 'LUZ'
-        TabOrder = 0
-        object LblValorLuz: TLabel
-          Left = 15
-          Top = 24
-          Width = 39
-          Height = 16
-          Caption = 'Valor:'
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clWindowText
-          Font.Height = -13
-          Font.Name = 'Tahoma'
-          Font.Style = [fsBold]
-          ParentFont = False
-        end
-        object LblVencimentoLuz: TLabel
-          Left = 15
-          Top = 50
-          Width = 81
-          Height = 16
-          Caption = 'Vencimento:'
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clWindowText
-          Font.Height = -13
-          Font.Name = 'Tahoma'
-          Font.Style = [fsBold]
-          ParentFont = False
-        end
-        object CpoValorLuz: TEdit
-          Left = 64
-          Top = 22
-          Width = 133
-          Height = 21
-          TabOrder = 0
-        end
-        object CpoVencimentoLuz: TDateTimePicker
-          Left = 105
-          Top = 49
-          Width = 92
-          Height = 21
-          Date = 43420.483108935190000000
-          Time = 43420.483108935190000000
-          TabOrder = 1
-        end
-        object BtnSalvarLuz: TButton
-          Left = 122
-          Top = 76
-          Width = 75
-          Height = 25
-          Caption = 'SALVAR'
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clWindowText
-          Font.Height = -11
-          Font.Name = 'Tahoma'
-          Font.Style = [fsBold]
-          ParentFont = False
-          TabOrder = 2
-          OnClick = BtnSalvarLuzClick
-        end
-      end
-      object GbInternet: TGroupBox
-        Left = 11
-        Top = 242
-        Width = 220
-        Height = 110
-        Caption = 'INTERNET'
-        TabOrder = 2
-        object LblValorInternet: TLabel
-          Left = 15
-          Top = 24
-          Width = 39
-          Height = 16
-          Caption = 'Valor:'
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clWindowText
-          Font.Height = -13
-          Font.Name = 'Tahoma'
-          Font.Style = [fsBold]
-          ParentFont = False
-        end
-        object LblVencimentoInternet: TLabel
-          Left = 16
-          Top = 50
-          Width = 81
-          Height = 16
-          Caption = 'Vencimento:'
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clWindowText
-          Font.Height = -13
-          Font.Name = 'Tahoma'
-          Font.Style = [fsBold]
-          ParentFont = False
-        end
-        object CpoValorInternet: TEdit
-          Left = 64
-          Top = 22
-          Width = 133
-          Height = 21
-          TabOrder = 0
-        end
-        object CpoVencimentoInternet: TDateTimePicker
-          Left = 105
-          Top = 49
-          Width = 92
-          Height = 21
-          Date = 43420.483108935190000000
-          Time = 43420.483108935190000000
-          TabOrder = 1
-        end
-        object BtnSalvarInternet: TButton
-          Left = 122
-          Top = 75
-          Width = 75
-          Height = 25
-          Caption = 'SALVAR'
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clWindowText
-          Font.Height = -11
-          Font.Name = 'Tahoma'
-          Font.Style = [fsBold]
-          ParentFont = False
-          TabOrder = 2
-          OnClick = BtnSalvarInternetClick
-        end
-      end
-      object GroupBox1: TGroupBox
-        Left = 11
-        Top = 356
-        Width = 220
-        Height = 110
-        Caption = 'TELEFONE'
-        TabOrder = 3
-        object LblValorTelefone: TLabel
-          Left = 15
-          Top = 24
-          Width = 39
-          Height = 16
-          Caption = 'Valor:'
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clWindowText
-          Font.Height = -13
-          Font.Name = 'Tahoma'
-          Font.Style = [fsBold]
-          ParentFont = False
-        end
-        object LblVencimentoTelefone: TLabel
-          Left = 16
-          Top = 50
-          Width = 81
-          Height = 16
-          Caption = 'Vencimento:'
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clWindowText
-          Font.Height = -13
-          Font.Name = 'Tahoma'
-          Font.Style = [fsBold]
-          ParentFont = False
-        end
-        object CpoValorTelefone: TEdit
-          Left = 64
-          Top = 22
-          Width = 133
-          Height = 21
-          TabOrder = 0
-        end
-        object CpoVencimentoTelefone: TDateTimePicker
-          Left = 105
-          Top = 49
-          Width = 92
-          Height = 21
-          Date = 43420.483108935190000000
-          Time = 43420.483108935190000000
-          TabOrder = 1
-        end
-        object BtnSalvarTelefone: TButton
-          Left = 122
-          Top = 75
-          Width = 75
-          Height = 25
-          Caption = 'SALVAR'
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clWindowText
-          Font.Height = -11
-          Font.Name = 'Tahoma'
-          Font.Style = [fsBold]
-          ParentFont = False
-          TabOrder = 2
-          OnClick = BtnSalvarTelefoneClick
-        end
-      end
+      OnClick = BtnConsultarClick
     end
     object BtnLimpar: TButton
       Left = 405
@@ -626,7 +357,7 @@ object FrmConsultaDespesas: TFrmConsultaDespesas
       Font.Name = 'Tahoma'
       Font.Style = [fsBold]
       ParentFont = False
-      TabOrder = 7
+      TabOrder = 6
       OnClick = BtnLimparClick
     end
     object CpoAno: TSpinEdit
@@ -654,7 +385,7 @@ object FrmConsultaDespesas: TFrmConsultaDespesas
       Top = 57
       Width = 121
       Height = 21
-      TabOrder = 11
+      TabOrder = 10
     end
   end
   object QrFixas: TFDQuery

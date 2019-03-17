@@ -9,7 +9,7 @@ uses
   FireDAC.Stan.Intf, FireDAC.Stan.Option, FireDAC.Stan.Param,
   FireDAC.Stan.Error, FireDAC.DatS, FireDAC.Phys.Intf, FireDAC.DApt.Intf,
   FireDAC.Stan.Async, FireDAC.DApt, FireDAC.Comp.DataSet, FireDAC.Comp.Client,
-  Datasnap.DBClient, Datasnap.Provider;
+  Datasnap.DBClient, Datasnap.Provider, System.DateUtils;
 
 type
   TFrmCadastrarConta = class(TForm)
@@ -33,8 +33,6 @@ type
     LblVencimentoUnico: TLabel;
     CpoVencimentoUnico: TDateTimePicker;
     CpoDescricao: TMemo;
-    LblDiaVencimento: TLabel;
-    CpoDiaVencimento: TSpinEdit;
     BtnRemover: TButton;
     LblTipoConta: TLabel;
     BtnBuscarNome: TButton;
@@ -102,7 +100,7 @@ implementation
 {$R *.dfm}
 
 uses
-DmConn, UnConsultaPessoa, UnConsultaTipoConta, UnConsultaProcedente;
+DmConn, UnConsultaPessoa, UnConsultaTipoConta, UnConsultaProcedente, UnFuncoes;
 
 procedure TFrmCadastrarConta.FormShow(Sender: TObject);
 begin
@@ -111,7 +109,23 @@ begin
   CpoVencimentoUnico.Date     := Date;
   CpoVencimentoUnico.Enabled  := False;
   CpoVencimentoParcelado.Date := Date;
-  CpoDiaVencimento.Enabled    := False;
+end;
+
+function ZeroAEsquerda(const sValor: string; const iComprimento: integer): string;
+var
+  sZeros, sRetorno: string;
+  iTamanho, iContador: integer;
+begin
+  iTamanho := Length(Trim(sValor));
+  sZeros   := ' ';
+
+  for iContador := 1 to iComprimento do
+  begin
+    sZeros := sZeros + '0';
+  end;
+
+  sRetorno := Copy(Trim(sZeros) + Trim(sValor), iTamanho + 1 , iComprimento);
+  Result   := sRetorno;
 end;
 
 procedure TFrmCadastrarConta.CarregaUltimoId(Sender: TObject);
@@ -265,7 +279,6 @@ begin
       CpoVencimentoParcelado.Enabled := True;
       CpoVencimentoUnico.Enabled     := False;
       BtnAdicionar.Enabled           := True;
-      CpoDiaVencimento.Enabled       := False;
       BtnRemover.Enabled             := True;
       GrdParcelas.Enabled            := True;
     end;
@@ -276,7 +289,6 @@ begin
       CpoVencimentoParcelado.Enabled := False;
       CpoVencimentoUnico.Enabled     := True;
       BtnAdicionar.Enabled           := False;
-      CpoDiaVencimento.Enabled       := False;
       BtnRemover.Enabled             := False;
       GrdParcelas.Enabled            := False;
     end;
@@ -287,9 +299,9 @@ begin
       CpoVencimentoParcelado.Enabled := False;
       CpoVencimentoUnico.Enabled     := False;
       BtnAdicionar.Enabled           := False;
-      CpoDiaVencimento.Enabled       := True;
       BtnRemover.Enabled             := False;
       GrdParcelas.Enabled            := False;
+      CpoVencimentoUnico.Enabled     := True;
     end;
   end;
 end;
@@ -302,7 +314,6 @@ begin
       ' SELECT c.DESCRICAO,                        '+
       '        c.MODO_PGTO,                        '+
       '        c.VALOR AS VALORCONTA,              '+
-      '        c.DIA_VENC AS DIAVENCIMENTO,        '+
       '        p.ID_PESSOA,                        '+
       '        p.NOME AS NOMEPESSOA,               '+
       '        ct.ID_CONTATIPO,                    '+
@@ -328,7 +339,6 @@ begin
     CpoProcedente.Text     := QrConsulta.FieldByName('NOMEPROCEDENTE').AsString;
     CpoDescricao.Text      := QrConsulta.FieldByName('DESCRICAO').AsString;
     CpoValorConta.Text     := QrConsulta.FieldByName('VALORCONTA').AsString;
-    CpoDiaVencimento.Value := QrConsulta.FieldByName('DIAVENCIMENTO').AsInteger;
 
     if (QrConsulta.FieldByName('MODO_PGTO').AsString = 'Parcelado') then
     begin
@@ -383,7 +393,6 @@ begin
   CpoProcedente.Clear;
   CpoDescricao.Clear;
   CpoValorConta.Clear;
-  CpoDiaVencimento.Clear;
   CpoNumeroParcela.Clear;
   CpoValorParcela.Clear;
   CdsGrade.Edit;
@@ -515,15 +524,15 @@ case GrpModoPagamento.ItemIndex of
         '                   DESCRICAO,      '+
         '                   MODO_PGTO,      '+
         '                   VALOR,          '+
-        '                   DIA_VENC,       '+
-        '                   ID_CONTATIPO)   '+
+        '                   ID_CONTATIPO,   '+
+        '                   ID_CONTAFIXA)   '+
         '            VALUES(:ID_PESSOA,     '+
         '                   :ID_PROCEDENTE, '+
         '                   :DESCRICAO,     '+
         '                   :MODO_PGTO,     '+
         '                   :VALOR,         '+
-        '                   :DIA_VENC,      '+
-        '                   :ID_CONTATIPO)  ';
+        '                   :ID_CONTATIPO,  '+
+        '                   :ID_CONTAFIXA)  ';
       QrCadastraConta.ParamByName('ID_PESSOA').AsInteger     :=
         StrToIntDef(CpoIdTitular.Text,0);
       QrCadastraConta.ParamByName('ID_PROCEDENTE').AsInteger :=
@@ -534,11 +543,39 @@ case GrpModoPagamento.ItemIndex of
         sModoPagamento;
       QrCadastraConta.ParamByName('VALOR').AsCurrency        :=
         StrToCurr(CpoValorConta.Text);
-      QrCadastraConta.ParamByName('DIA_VENC').AsInteger      :=
-        StrToInt(CpoDiaVencimento.Text);
       QrCadastraConta.ParamByName('ID_CONTATIPO').AsInteger  :=
         StrToIntDef(CpoIdTipoConta.Text,0);
+
+      if (StrToInt(CpoIdTipoConta.Text) <= 4) then
+      begin
+        QrCadastraConta.ParamByName('ID_CONTAFIXA').AsInteger  :=
+          StrToIntDef(CpoIdTipoConta.Text,0);
+      end;
+
       QrCadastraConta.ExecSQL;
+
+      QrCadastraParcela.Close;
+      QrCadastraParcela.SQL.Text :=
+        ' INSERT INTO parcela(NUMERO,        '+
+        '                     VALOR,         '+
+        '                     VENCIMENTO,    '+
+        '                     PAGO,          '+
+        '                     ID_CONTA)      '+
+        '              VALUES(:NUMERO,       '+
+        '                     :VALOR,        '+
+        '                     :VENCIMENTO,  '+
+        '                     :PAGO,         '+
+        '                     :ID_CONTA)     ';
+      QrCadastraParcela.ParamByName('NUMERO').AsInteger   := 1 ;
+      QrCadastraParcela.ParamByName('VALOR').AsCurrency   :=
+        StrToCurr(CpoValorConta.Text);
+
+      QrCadastraParcela.ParamByName('VENCIMENTO').AsDate  :=
+        CpoVencimentoUnico.Date;
+      QrCadastraParcela.ParamByName('PAGO').AsString := 'N';
+      QrCadastraParcela.ParamByName('ID_CONTA').AsInteger :=
+        StrToInt(CpoIdConta.Text);
+      QrCadastraParcela.ExecSQL;
       LimpaCampos;
     end;
   end;
@@ -658,7 +695,6 @@ begin
         '        DESCRICAO = :DESCRICAO,         '+
         '        MODO_PGTO = :MODO_PGTO,         '+
         '        VALOR = :VALOR,                 '+
-        '        DIA_VENC = :DIA_VENC,           '+
         '        ID_CONTATIPO = :ID_CONTATIPO    '+
         '  WHERE ID_CONTA = :ID_CONTA            ';
       QrCadastraConta.ParamByName('ID_CONTA').AsInteger      :=
@@ -673,8 +709,6 @@ begin
         sModoPagamento;
       QrCadastraConta.ParamByName('VALOR').AsCurrency        :=
         StrToCurr(CpoValorConta.Text);
-      QrCadastraConta.ParamByName('DIA_VENC').AsInteger      :=
-        StrToInt(CpoDiaVencimento.Text);
       QrCadastraConta.ParamByName('ID_CONTATIPO').AsInteger  :=
         StrToIntDef(CpoIdTipoConta.Text,0);
       QrCadastraConta.ExecSQL;

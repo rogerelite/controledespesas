@@ -91,23 +91,10 @@ object FrmCadastrarConta: TFrmCadastrarConta
     end
     object LblVencimentoUnico: TLabel
       Left = 26
-      Top = 271
+      Top = 263
       Width = 84
       Height = 16
       Caption = 'VENCIMENTO:'
-      Font.Charset = DEFAULT_CHARSET
-      Font.Color = clWindowText
-      Font.Height = -13
-      Font.Name = 'Tahoma'
-      Font.Style = [fsBold]
-      ParentFont = False
-    end
-    object LblDiaVencimento: TLabel
-      Left = 26
-      Top = 311
-      Width = 112
-      Height = 16
-      Caption = 'DIA VENCIMENTO:'
       Font.Charset = DEFAULT_CHARSET
       Font.Color = clWindowText
       Font.Height = -13
@@ -347,7 +334,7 @@ object FrmCadastrarConta: TFrmCadastrarConta
     end
     object GrpModoPagamento: TRadioGroup
       Left = 26
-      Top = 353
+      Top = 337
       Width = 185
       Height = 105
       Caption = 'MODO DE PAGAMENTO'
@@ -361,7 +348,7 @@ object FrmCadastrarConta: TFrmCadastrarConta
     end
     object CpoVencimentoUnico: TDateTimePicker
       Left = 152
-      Top = 271
+      Top = 263
       Width = 186
       Height = 21
       Date = 43420.483108935190000000
@@ -378,16 +365,6 @@ object FrmCadastrarConta: TFrmCadastrarConta
       ScrollBars = ssVertical
       TabOrder = 6
     end
-    object CpoDiaVencimento: TSpinEdit
-      Left = 152
-      Top = 308
-      Width = 46
-      Height = 22
-      MaxValue = 0
-      MinValue = 0
-      TabOrder = 7
-      Value = 0
-    end
     object BtnBuscarNome: TButton
       Left = 151
       Top = 45
@@ -400,7 +377,7 @@ object FrmCadastrarConta: TFrmCadastrarConta
       Font.Name = 'Tahoma'
       Font.Style = [fsBold]
       ParentFont = False
-      TabOrder = 8
+      TabOrder = 7
       OnClick = BtnBuscarNomeClick
     end
     object CpoNome: TEdit
@@ -410,14 +387,14 @@ object FrmCadastrarConta: TFrmCadastrarConta
       Height = 21
       Enabled = False
       ReadOnly = True
-      TabOrder = 9
+      TabOrder = 8
     end
     object CpoIdTitular: TEdit
       Left = 416
       Top = 47
       Width = 15
       Height = 21
-      TabOrder = 10
+      TabOrder = 9
       Visible = False
     end
     object CpoIdTipoConta: TEdit
@@ -425,7 +402,7 @@ object FrmCadastrarConta: TFrmCadastrarConta
       Top = 79
       Width = 15
       Height = 21
-      TabOrder = 11
+      TabOrder = 10
       Visible = False
     end
     object CpoIdProcedente: TEdit
@@ -433,7 +410,7 @@ object FrmCadastrarConta: TFrmCadastrarConta
       Top = 111
       Width = 15
       Height = 21
-      TabOrder = 12
+      TabOrder = 11
       Visible = False
     end
     object BtnBuscarTipoConta: TButton
@@ -448,7 +425,7 @@ object FrmCadastrarConta: TFrmCadastrarConta
       Font.Name = 'Tahoma'
       Font.Style = [fsBold]
       ParentFont = False
-      TabOrder = 13
+      TabOrder = 12
       OnClick = BtnBuscarTipoContaClick
     end
     object CpoTipoConta: TEdit
@@ -458,7 +435,7 @@ object FrmCadastrarConta: TFrmCadastrarConta
       Height = 21
       Enabled = False
       ReadOnly = True
-      TabOrder = 14
+      TabOrder = 13
     end
     object BtnBuscarProcedente: TButton
       Left = 151
@@ -472,7 +449,7 @@ object FrmCadastrarConta: TFrmCadastrarConta
       Font.Name = 'Tahoma'
       Font.Style = [fsBold]
       ParentFont = False
-      TabOrder = 15
+      TabOrder = 14
       OnClick = BtnBuscarProcedenteClick
     end
     object CpoProcedente: TEdit
@@ -481,14 +458,14 @@ object FrmCadastrarConta: TFrmCadastrarConta
       Width = 191
       Height = 21
       Enabled = False
-      TabOrder = 16
+      TabOrder = 15
     end
     object CpoIdConta: TEdit
       Left = 152
       Top = 19
       Width = 45
       Height = 21
-      TabOrder = 17
+      TabOrder = 16
       OnExit = CpoIdContaExit
     end
     object BtnCancelar: TButton
@@ -503,7 +480,7 @@ object FrmCadastrarConta: TFrmCadastrarConta
       Font.Name = 'Tahoma'
       Font.Style = [fsBold]
       ParentFont = False
-      TabOrder = 18
+      TabOrder = 17
       OnClick = BtnCancelarClick
     end
     object BtnExcluir: TButton
@@ -518,7 +495,7 @@ object FrmCadastrarConta: TFrmCadastrarConta
       Font.Name = 'Tahoma'
       Font.Style = [fsBold]
       ParentFont = False
-      TabOrder = 19
+      TabOrder = 18
     end
   end
   object QrIdConta: TFDQuery

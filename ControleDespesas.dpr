@@ -15,7 +15,9 @@ uses
   UnCadastrarProcedente in 'UnCadastrarProcedente.pas' {FrmCadastrarProcedente},
   UnConfigurarProcedente in 'UnConfigurarProcedente.pas' {FrmConfigurarProcedente},
   UnPagarConta in 'UnPagarConta.pas' {FrmPagarConta},
-  UnConsultaDespesas in 'UnConsultaDespesas.pas' {FrmConsultaDespesas};
+  UnConsultaDespesas in 'UnConsultaDespesas.pas' {FrmConsultaDespesas},
+  UnConfigurarSistema in 'UnConfigurarSistema.pas' {FrmConfigurarSistema},
+  UnFuncoes in 'UnFuncoes.pas' {FrmFuncoes};
 
 {$R *.res}
 
@@ -36,5 +38,7 @@ begin
   Application.CreateForm(TFrmConfigurarProcedente, FrmConfigurarProcedente);
   Application.CreateForm(TFrmPagarConta, FrmPagarConta);
   Application.CreateForm(TFrmConsultaDespesas, FrmConsultaDespesas);
+  Application.CreateForm(TFrmConfigurarSistema, FrmConfigurarSistema);
+  Application.CreateForm(TFrmFuncoes, FrmFuncoes);
   Application.Run;
 end.

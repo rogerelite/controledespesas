@@ -48,7 +48,7 @@ object FrmMenu: TFrmMenu
         Caption = 'CONTA'
         OnClick = CadContaClick
       end
-      object PROCEDENTE1: TMenuItem
+      object CadProcedente: TMenuItem
         Caption = 'PROCEDENTE'
         OnClick = CadProcedenteClick
       end
@@ -66,6 +66,10 @@ object FrmMenu: TFrmMenu
       object ConfProcedente: TMenuItem
         Caption = 'PROCEDENTE'
         OnClick = ConfProcedenteClick
+      end
+      object ConfSistema: TMenuItem
+        Caption = 'SISTEMA'
+        OnClick = ConfSistemaClick
       end
     end
   end
