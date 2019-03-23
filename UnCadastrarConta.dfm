@@ -496,6 +496,7 @@ object FrmCadastrarConta: TFrmCadastrarConta
       Font.Style = [fsBold]
       ParentFont = False
       TabOrder = 18
+      OnClick = BtnExcluirClick
     end
   end
   object QrIdConta: TFDQuery
@@ -546,5 +547,15 @@ object FrmCadastrarConta: TFrmCadastrarConta
     Connection = DataModule1.FDConn
     Left = 373
     Top = 264
+  end
+  object QrExcluiConta: TFDQuery
+    Connection = DataModule1.FDConn
+    Left = 245
+    Top = 272
+  end
+  object QrExcluiParcela: TFDQuery
+    Connection = DataModule1.FDConn
+    Left = 309
+    Top = 272
   end
 end

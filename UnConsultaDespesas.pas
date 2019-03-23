@@ -250,7 +250,7 @@ begin
       ' SELECT cf.ID_CONTA AS ID_FIXA,             '+
       '        cf.NOME,                            '+
       '        cf.ATIVA,                           '+
-      '        p.VENCIMENTO                        '+
+      '        MonthOf(p.VENCIMENTO) as MES        '+
       '   FROM contafixa cf                        '+
       '        INNER JOIN conta c                  '+
       '           ON c.ID_CONTAFIXA = cf.ID_CONTA  '+
@@ -261,7 +261,7 @@ begin
     QrConsulta.ParamByName('MES').AsInteger := CpoMes.Value;
     QrConsulta.Open;
 
-    iMes := MonthOf(QrConsulta.FieldByName('VENCIMENTO').AsDateTime);
+    iMes := QrConsulta.FieldByName('MES').AsInteger;
 
     while (not QrConsulta.Eof) do
     begin

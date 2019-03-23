@@ -63,6 +63,8 @@ type
     QrConsulta: TFDQuery;
     BtnCancelar: TButton;
     BtnExcluir: TButton;
+    QrExcluiConta: TFDQuery;
+    QrExcluiParcela: TFDQuery;
     procedure BtnFecharClick(Sender: TObject);
     procedure GrpModoPagamentoClick(Sender: TObject);
     procedure FormShow(Sender: TObject);
@@ -76,12 +78,14 @@ type
     procedure CpoIdContaExit(Sender: TObject);
     procedure BtnCancelarClick(Sender: TObject);
     procedure GrdParcelasDblClick(Sender: TObject);
+    procedure BtnExcluirClick(Sender: TObject);
   private
     procedure ConsultaConta;
     procedure CarregaUltimoId(Sender: TObject);
     procedure ConsultaParcelas;
     procedure CadastraConta;
     procedure AtualizaConta;
+    function RetornaUltimoId: Integer;
     { Private declarations }
   public
 
@@ -137,6 +141,21 @@ begin
   QrIdConta.Open;
   iIdConta        := QrIdConta.FieldByName('COD').AsInteger + 1;
   CpoIdConta.Text := IntToStr(iIdConta);
+end;
+
+function TFrmCadastrarConta.RetornaUltimoId: Integer;
+begin
+  try
+    QrIdConta.Close;
+    QrIdConta.SQL.Text :=
+      ' SELECT MAX(ID_CONTA) AS COD '+
+      '   FROM conta                ';
+    QrIdConta.Open;
+
+    Result := QrIdConta.FieldByName('COD').AsInteger;
+  finally
+    QrIdConta.Close;
+  end;
 end;
 
 procedure TFrmCadastrarConta.BtnAdicionarClick(Sender: TObject);
@@ -197,6 +216,29 @@ begin
   CarregaUltimoId(Sender);
   CpoIdConta.Enabled := True;
   CpoIdConta.SetFocus;
+end;
+
+procedure TFrmCadastrarConta.BtnExcluirClick(Sender: TObject);
+begin
+  try
+    QrExcluiParcela.Close;
+    QrExcluiParcela.SQL.Text :=
+      ' DELETE            '+
+      '   FROM parcela    '+
+      '  WHERE ID_CONTA = '+ CpoIdConta.Text;
+    QrExcluiParcela.ExecSQL;
+
+    QrExcluiConta.Close;
+    QrExcluiConta.SQL.Text :=
+      ' DELETE            '+
+      '   FROM conta      '+
+      '  WHERE ID_CONTA = '+ CpoIdConta.Text;
+    QrExcluiConta.ExecSQL;
+  finally
+    QrExcluiParcela.Close;
+    QrExcluiConta.Close;
+  end;
+  BtnCancelarClick(Sender);
 end;
 
 procedure TFrmCadastrarConta.BtnFecharClick(Sender: TObject);
@@ -573,8 +615,7 @@ case GrpModoPagamento.ItemIndex of
       QrCadastraParcela.ParamByName('VENCIMENTO').AsDate  :=
         CpoVencimentoUnico.Date;
       QrCadastraParcela.ParamByName('PAGO').AsString := 'N';
-      QrCadastraParcela.ParamByName('ID_CONTA').AsInteger :=
-        StrToInt(CpoIdConta.Text);
+      QrCadastraParcela.ParamByName('ID_CONTA').AsInteger := RetornaUltimoId;
       QrCadastraParcela.ExecSQL;
       LimpaCampos;
     end;
