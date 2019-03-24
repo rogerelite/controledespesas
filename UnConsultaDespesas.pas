@@ -70,6 +70,7 @@ type
     function CalculaTotalContas: Currency;
     function CalculaSaldo: Currency;
     procedure LimparCampos(Sender: TObject);
+    function BuscaContaFixa(iIdContaFixa: Integer): Boolean;
     { Private declarations }
   public
     { Public declarations }
@@ -241,58 +242,85 @@ begin
 end;
 
 procedure TFrmConsultaDespesas.ConsultaContasFixas;
-var
- iMes : Integer;
 begin
+  {1 - Luz}
+  if (not BuscaContaFixa(1)) then
+  begin
+    ShowMessage('Conta de luz não cadastrada para este período.');
+  end;
+
+  {2 - Água}
+  if (not BuscaContaFixa(2)) then
+  begin
+    ShowMessage('Conta de água não cadastrada para este período.');
+  end;
+
+  {3 - Telefone móvel}
+  if (not BuscaContaFixa(3)) then
+  begin
+    ShowMessage('Conta de telefone móvel não cadastrada para este período.');
+  end;
+
+  {4 - Internet}
+  if (not BuscaContaFixa(4)) then
+  begin
+    ShowMessage('Conta de internet não cadastrada para este período.');
+  end;
+end;
+
+function TFrmConsultaDespesas.BuscaContaFixa(iIdContaFixa: Integer): Boolean;
+begin
+  QrConsulta.Close;
+  QrConsulta.SQL.Text :=
+    ' SELECT cf.ID_CONTA AS ID_FIXA,            '+
+    '        cf.NOME,                           '+
+    '        cf.ATIVA,                          '+
+    '        p.VENCIMENTO                       '+
+    '   FROM contafixa cf                       '+
+    '        INNER JOIN conta c                 '+
+    '           ON c.ID_CONTAFIXA = cf.ID_CONTA '+
+    '        INNER JOIN parcela p               '+
+    '           ON p.ID_CONTA = c.ID_CONTA      '+
+    '  WHERE cf.ATIVA = ''S''                   '+
+    '    AND MONTH(p.VENCIMENTO) = :MES         '+
+    '    AND YEAR(p.VENCIMENTO) = :ANO          '+
+    '    AND cf.ID_CONTA = :ID_FIXA             ';
+  QrConsulta.ParamByName('MES').AsInteger     := CpoMes.Value;
+  QrConsulta.ParamByName('ANO').AsInteger     := CpoAno.Value;
+  QrConsulta.ParamByName('ID_FIXA').AsInteger := iIdContaFixa;
+  QrConsulta.Open;
+
+  QrFixas.Close;
+  QrFixas.SQL.Text :=
+    ' SELECT ATIVA                '+
+    '   FROM contafixa            '+
+    '  WHERE ID_CONTA = :ID_CONTA ';
+  QrFixas.ParamByName('ID_CONTA').AsInteger := iIdContaFixa;
+  QrFixas.Open;
+
   try
-    QrConsulta.Close;
-    QrConsulta.SQL.Text :=
-      ' SELECT cf.ID_CONTA AS ID_FIXA,             '+
-      '        cf.NOME,                            '+
-      '        cf.ATIVA,                           '+
-      '        MonthOf(p.VENCIMENTO) as MES        '+
-      '   FROM contafixa cf                        '+
-      '        INNER JOIN conta c                  '+
-      '           ON c.ID_CONTAFIXA = cf.ID_CONTA  '+
-      '        INNER JOIN parcela p                '+
-      '           ON p.ID_CONTA = c.ID_CONTA       '+
-      '  WHERE cf.ATIVA = ''S''                    '+
-      '    AND MonthOf(p.VENCIMENTO) = :MES        ';
-    QrConsulta.ParamByName('MES').AsInteger := CpoMes.Value;
-    QrConsulta.Open;
-
-    iMes := QrConsulta.FieldByName('MES').AsInteger;
-
-    while (not QrConsulta.Eof) do
+    if (not QrConsulta.IsEmpty) then
     begin
-      {1 - Luz}
-      if ((QrConsulta.FieldByName('ID_FIXA').AsInteger = 1) and
-          (iMes <> CpoMes.Value)) then
+      if ((MonthOf(QrConsulta.FieldByName('VENCIMENTO').AsDateTime) <> CpoMes.Value) and
+          (YearOf(QrConsulta.FieldByName('VENCIMENTO').AsDateTime) <> CpoAno.Value)) then
       begin
-        ShowMessage('Conta de luz não cadastrada para este mês.');
-      end;
-
-      {2 - Água}
-      if ((QrConsulta.FieldByName('ID_FIXA').AsInteger = 2)and
-          (iMes <> CpoMes.Value)) then
+        Result := False;
+      end
+      else
       begin
-        ShowMessage('Conta de água não cadastrada para este mês.');
+        Result := True;
       end;
-
-      {3 - Telefone móvel}
-      if ((QrConsulta.FieldByName('ID_FIXA').AsInteger = 3)and
-          (iMes <> CpoMes.Value)) then
+    end
+    else
+    begin
+      if (QrFixas.FieldByName('ATIVA').AsString = 'S') then
       begin
-        ShowMessage('Conta de telefone móvel não cadastrada para este mês.');
-      end;
-
-      {4 - Internet}
-      if ((QrConsulta.FieldByName('ID_FIXA').AsInteger = 4)and
-          (iMes <> CpoMes.Value)) then
+        Result := False;
+      end
+      else
       begin
-        ShowMessage('Conta de internet não cadastrada para este mês.');
+        Result := True;
       end;
-      QrConsulta.Next;
     end;
   finally
     QrConsulta.Close;
