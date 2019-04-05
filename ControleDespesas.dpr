@@ -17,7 +17,8 @@ uses
   UnPagarConta in 'UnPagarConta.pas' {FrmPagarConta},
   UnConsultaDespesas in 'UnConsultaDespesas.pas' {FrmConsultaDespesas},
   UnConfigurarSistema in 'UnConfigurarSistema.pas' {FrmConfigurarSistema},
-  UnFuncoes in 'UnFuncoes.pas' {FrmFuncoes};
+  UnFuncoes in 'UnFuncoes.pas' {FrmFuncoes},
+  UnConsultarConta in 'UnConsultarConta.pas' {FrmConsultarConta};
 
 {$R *.res}
 
@@ -40,5 +41,6 @@ begin
   Application.CreateForm(TFrmConsultaDespesas, FrmConsultaDespesas);
   Application.CreateForm(TFrmConfigurarSistema, FrmConfigurarSistema);
   Application.CreateForm(TFrmFuncoes, FrmFuncoes);
+  Application.CreateForm(TFrmConsultarConta, FrmConsultarConta);
   Application.Run;
 end.

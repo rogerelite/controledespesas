@@ -39,9 +39,9 @@ procedure TFrmConsultaPessoa.FormShow(Sender: TObject);
 begin
   QrConsultaPessoas.Close;
   QrConsultaPessoas.SQL.Text :=
-    'SELECT * FROM pessoa';
+    ' SELECT *     '+
+    '   FROM pessoa';
   QrConsultaPessoas.Open;
-
 end;
 
 procedure TFrmConsultaPessoa.GrdConsultaPessoasDblClick(Sender: TObject);

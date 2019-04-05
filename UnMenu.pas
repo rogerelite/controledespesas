@@ -54,7 +54,7 @@ implementation
 uses UnConsulta, UnConsultaPessoa, UnConfigurarConta, UnConfigurarPessoa, UnConfigurarTipoConta,
   UnCadastrarConta, UnCadastrarPessoa, UnCadastrarTipoConta,
   UnCadastrarProcedente, UnConfigurarProcedente, UnConsultaDespesas,
-  UnConsultaConta, UnConfigurarSistema;
+  UnConsultarConta, UnConfigurarSistema;
 
 procedure TFrmMenu.ConfContaClick(Sender: TObject);
 begin

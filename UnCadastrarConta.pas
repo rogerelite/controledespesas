@@ -65,6 +65,7 @@ type
     BtnExcluir: TButton;
     QrExcluiConta: TFDQuery;
     QrExcluiParcela: TFDQuery;
+    BtnBuscarConta: TButton;
     procedure BtnFecharClick(Sender: TObject);
     procedure GrpModoPagamentoClick(Sender: TObject);
     procedure FormShow(Sender: TObject);
@@ -79,6 +80,7 @@ type
     procedure BtnCancelarClick(Sender: TObject);
     procedure GrdParcelasDblClick(Sender: TObject);
     procedure BtnExcluirClick(Sender: TObject);
+    procedure BtnBuscarContaClick(Sender: TObject);
   private
     procedure ConsultaConta;
     procedure CarregaUltimoId(Sender: TObject);
@@ -177,10 +179,21 @@ begin
   CpoValorParcela.Clear;
 end;
 
+procedure TFrmCadastrarConta.BtnBuscarContaClick(Sender: TObject);
+begin
+  Application.CreateForm(TFrmConsultarConta, FrmConsultarConta);
+  try
+    bAbriuPorCadastroConta := True;
+    FrmConsultarConta.ShowModal;
+  finally
+    FreeAndNil(FrmConsultarConta);
+  end;
+end;
+
 procedure TFrmCadastrarConta.BtnBuscarNomeClick(Sender: TObject);
 begin
+  Application.CreateForm(TFrmConsultaPessoa, FrmConsultaPessoa);
   try
-    Application.CreateForm(TFrmConsultaPessoa, FrmConsultaPessoa);
     bAbriuPorCadastroConta := True;
     FrmConsultaPessoa.ShowModal;
   finally

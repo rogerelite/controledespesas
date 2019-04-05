@@ -118,9 +118,9 @@ object FrmCadastrarConta: TFrmCadastrarConta
     object IdConta: TLabel
       Left = 26
       Top = 20
-      Width = 19
+      Width = 47
       Height = 16
-      Caption = 'ID:'
+      Caption = 'CONTA:'
       Font.Charset = DEFAULT_CHARSET
       Font.Color = clWindowText
       Font.Height = -13
@@ -461,8 +461,8 @@ object FrmCadastrarConta: TFrmCadastrarConta
       TabOrder = 15
     end
     object CpoIdConta: TEdit
-      Left = 152
-      Top = 19
+      Left = 226
+      Top = 17
       Width = 45
       Height = 21
       TabOrder = 16
@@ -497,6 +497,21 @@ object FrmCadastrarConta: TFrmCadastrarConta
       ParentFont = False
       TabOrder = 18
       OnClick = BtnExcluirClick
+    end
+    object BtnBuscarConta: TButton
+      Left = 151
+      Top = 15
+      Width = 75
+      Height = 25
+      Caption = 'BUSCAR'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'Tahoma'
+      Font.Style = [fsBold]
+      ParentFont = False
+      TabOrder = 19
+      OnClick = BtnBuscarContaClick
     end
   end
   object QrIdConta: TFDQuery
