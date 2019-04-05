@@ -461,11 +461,12 @@ object FrmCadastrarConta: TFrmCadastrarConta
       TabOrder = 15
     end
     object CpoIdConta: TEdit
-      Left = 226
+      Left = 416
       Top = 17
-      Width = 45
+      Width = 15
       Height = 21
       TabOrder = 16
+      Visible = False
       OnExit = CpoIdContaExit
     end
     object BtnCancelar: TButton
@@ -512,6 +513,15 @@ object FrmCadastrarConta: TFrmCadastrarConta
       ParentFont = False
       TabOrder = 19
       OnClick = BtnBuscarContaClick
+    end
+    object CpoDescricaoConta: TEdit
+      Left = 226
+      Top = 17
+      Width = 191
+      Height = 21
+      Enabled = False
+      ReadOnly = True
+      TabOrder = 20
     end
   end
   object QrIdConta: TFDQuery

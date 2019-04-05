@@ -49,11 +49,11 @@ begin
   sId   := GrdConsultaProcedentes.Columns.Items[0].Field.Text;
   sNome := GrdConsultaProcedentes.Columns.Items[1].Field.Text;
 
-  if (bAbriuPorCadastroConta) then
+  if (bAbriuPorCadastrarConta) then
   begin
     FrmCadastrarConta.CpoIdProcedente.Text := sId;
     FrmCadastrarConta.CpoProcedente.Text   := sNome;
-    bAbriuPorCadastroConta                 := False;
+    bAbriuPorCadastrarConta                := False;
   end
   else if (UnConfigurarProcedente.bAbriuPorConfigurar) then
   begin

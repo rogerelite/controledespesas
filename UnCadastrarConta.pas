@@ -66,6 +66,7 @@ type
     QrExcluiConta: TFDQuery;
     QrExcluiParcela: TFDQuery;
     BtnBuscarConta: TButton;
+    CpoDescricaoConta: TEdit;
     procedure BtnFecharClick(Sender: TObject);
     procedure GrpModoPagamentoClick(Sender: TObject);
     procedure FormShow(Sender: TObject);
@@ -96,7 +97,7 @@ type
 var
   FrmCadastrarConta: TFrmCadastrarConta;
   bParcelado,
-  bAbriuPorCadastroConta,
+  bAbriuPorCadastrarConta,
   bContaExistente         : boolean;
   iIdConta                : Integer;
   sModoPagamento          : String;
@@ -106,7 +107,8 @@ implementation
 {$R *.dfm}
 
 uses
-DmConn, UnConsultaPessoa, UnConsultaTipoConta, UnConsultaProcedente, UnFuncoes;
+DmConn, UnConsultaPessoa, UnConsultaTipoConta, UnConsultaProcedente, UnFuncoes,
+  UnConsultarConta;
 
 procedure TFrmCadastrarConta.FormShow(Sender: TObject);
 begin
@@ -183,7 +185,7 @@ procedure TFrmCadastrarConta.BtnBuscarContaClick(Sender: TObject);
 begin
   Application.CreateForm(TFrmConsultarConta, FrmConsultarConta);
   try
-    bAbriuPorCadastroConta := True;
+    bAbriuPorCadastrarConta := True;
     FrmConsultarConta.ShowModal;
   finally
     FreeAndNil(FrmConsultarConta);
@@ -194,7 +196,7 @@ procedure TFrmCadastrarConta.BtnBuscarNomeClick(Sender: TObject);
 begin
   Application.CreateForm(TFrmConsultaPessoa, FrmConsultaPessoa);
   try
-    bAbriuPorCadastroConta := True;
+    bAbriuPorCadastrarConta := True;
     FrmConsultaPessoa.ShowModal;
   finally
     FreeAndNil(FrmConsultaPessoa);
@@ -205,7 +207,7 @@ procedure TFrmCadastrarConta.BtnBuscarProcedenteClick(Sender: TObject);
 begin
   try
     Application.CreateForm(TFrmConsultaProcedente, FrmConsultaProcedente);
-    bAbriuPorCadastroConta := True;
+    bAbriuPorCadastrarConta := True;
     FrmConsultaProcedente.ShowModal;
   finally
     FreeAndNil(FrmConsultaProcedente);
@@ -228,7 +230,7 @@ begin
   LimpaCampos;
   CarregaUltimoId(Sender);
   CpoIdConta.Enabled := True;
-  CpoIdConta.SetFocus;
+  BtnBuscarConta.SetFocus;
 end;
 
 procedure TFrmCadastrarConta.BtnExcluirClick(Sender: TObject);

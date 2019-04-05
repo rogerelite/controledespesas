@@ -13,9 +13,11 @@ uses
 type
   TFrmConsultarConta = class(TForm)
     PaConteudo: TPanel;
-    GrdConsultaPessoas: TDBGrid;
+    GrdConsultaConta: TDBGrid;
     DsConsultaConta: TDataSource;
     QrConsultaConta: TFDQuery;
+    procedure FormShow(Sender: TObject);
+    procedure GrdConsultaContaDblClick(Sender: TObject);
   private
     { Private declarations }
   public
@@ -28,5 +30,35 @@ var
 implementation
 
 {$R *.dfm}
+uses
+  UnCadastrarConta;
+
+procedure TFrmConsultarConta.FormShow(Sender: TObject);
+begin
+  QrConsultaConta.Close;
+  QrConsultaConta.SQL.Text :=
+    ' SELECT ID_CONTA, '+
+    '        DESCRICAO '+
+    '   FROM conta     ';
+  QrConsultaConta.Open;
+end;
+
+procedure TFrmConsultarConta.GrdConsultaContaDblClick(Sender: TObject);
+var
+  sId,
+  sDescricao : String;
+begin
+  sId        := GrdConsultaConta.Columns.Items[0].Field.Text;
+  sDescricao := GrdConsultaConta.Columns.Items[1].Field.Text;
+  if (UnCadastrarConta.bAbriuPorCadastrarConta) then
+  begin
+    FrmCadastrarConta.CpoIdConta.Text        := sId;
+    FrmCadastrarConta.CpoDescricaoConta.Text := sDescricao;
+    FrmCadastrarConta.CpoIdContaExit(Sender);
+    UnCadastrarConta.bAbriuPorCadastrarConta := False;
+  end;
+  QrConsultaConta.Close;
+  Close;
+end;
 
 end.

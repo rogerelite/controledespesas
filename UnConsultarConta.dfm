@@ -11,6 +11,7 @@ object FrmConsultarConta: TFrmConsultarConta
   Font.Name = 'Tahoma'
   Font.Style = []
   OldCreateOrder = False
+  OnShow = FormShow
   PixelsPerInch = 96
   TextHeight = 13
   object PaConteudo: TPanel
@@ -24,7 +25,7 @@ object FrmConsultarConta: TFrmConsultarConta
     TabOrder = 0
     ExplicitWidth = 288
     ExplicitHeight = 306
-    object GrdConsultaPessoas: TDBGrid
+    object GrdConsultaConta: TDBGrid
       AlignWithMargins = True
       Left = 4
       Top = 104
@@ -39,6 +40,7 @@ object FrmConsultarConta: TFrmConsultarConta
       TitleFont.Height = -11
       TitleFont.Name = 'Tahoma'
       TitleFont.Style = []
+      OnDblClick = GrdConsultaContaDblClick
     end
   end
   object DsConsultaConta: TDataSource

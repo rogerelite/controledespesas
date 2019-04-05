@@ -56,11 +56,11 @@ begin
     FrmConsultaDespesas.CpoNome.Text     := sNome;
     UnConsultaDespesas.bAbriuPorConsultaDespesas := False;
   end
-  else if (UnCadastrarConta.bAbriuPorCadastroConta) then
+  else if (UnCadastrarConta.bAbriuPorCadastrarConta) then
   begin
     FrmCadastrarConta.CpoIdTitular.Text := sId;
     FrmCadastrarConta.CpoNome.Text      := sNome;
-    bAbriuPorCadastroConta              := False;
+    bAbriuPorCadastrarConta             := False;
   end
   else if (UnConfigurarPessoa.bAbriuPorConfigurar) then
   begin
