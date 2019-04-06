@@ -297,6 +297,7 @@ end;
 
 procedure TFrmCadastrarConta.CpoIdContaExit(Sender: TObject);
 begin
+  CdsGrade.EmptyDataSet;
   QrConsulta.Close;
   QrConsulta.SQL.Text :=
     ' SELECT ID_CONTA '+
@@ -441,6 +442,7 @@ end;
 
 procedure TFrmCadastrarConta.LimpaCampos;
 begin
+  CpoDescricaoConta.Clear;
   CpoIdConta.Clear;
   CpoIdTitular.Clear;
   CpoNome.Clear;

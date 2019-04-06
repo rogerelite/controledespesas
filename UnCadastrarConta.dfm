@@ -146,7 +146,6 @@ object FrmCadastrarConta: TFrmCadastrarConta
       Top = 233
       Width = 133
       Height = 21
-      NumbersOnly = True
       TabOrder = 0
     end
     object GrpParcelas: TGroupBox
