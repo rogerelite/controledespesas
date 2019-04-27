@@ -23,8 +23,6 @@ object FrmConsultarConta: TFrmConsultarConta
     Color = clWhite
     ParentBackground = False
     TabOrder = 0
-    ExplicitWidth = 288
-    ExplicitHeight = 306
     object GrdConsultaConta: TDBGrid
       AlignWithMargins = True
       Left = 4
@@ -51,6 +49,11 @@ object FrmConsultarConta: TFrmConsultarConta
   object QrConsultaConta: TFDQuery
     Connection = DataModule1.FDConn
     Left = 40
+    Top = 24
+  end
+  object QrSelecionaConta: TFDQuery
+    Connection = DataModule1.FDConn
+    Left = 232
     Top = 24
   end
 end

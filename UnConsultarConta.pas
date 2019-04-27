@@ -16,12 +16,14 @@ type
     GrdConsultaConta: TDBGrid;
     DsConsultaConta: TDataSource;
     QrConsultaConta: TFDQuery;
+    QrSelecionaConta: TFDQuery;
     procedure FormShow(Sender: TObject);
     procedure GrdConsultaContaDblClick(Sender: TObject);
   private
     { Private declarations }
   public
     { Public declarations }
+    sIdConta : String;
   end;
 
 var
@@ -44,20 +46,28 @@ begin
 end;
 
 procedure TFrmConsultarConta.GrdConsultaContaDblClick(Sender: TObject);
-var
-  sId,
-  sDescricao : String;
 begin
-  sId        := GrdConsultaConta.Columns.Items[0].Field.Text;
-  sDescricao := GrdConsultaConta.Columns.Items[1].Field.Text;
+  sIdConta   := GrdConsultaConta.Columns.Items[0].Field.Text;
+
+  QrSelecionaConta.Close;
+  QrSelecionaConta.SQL.Text :=
+    ' SELECT *                    '+
+    '   FROM conta                '+
+    '  WHERE ID_CONTA = :ID_CONTA ';
+  QrSelecionaConta.ParamByName('ID_CONTA').AsString := sIdConta;
+  QrSelecionaConta.Close;
+  QrSelecionaConta.Open;
+
   if (UnCadastrarConta.bAbriuPorCadastrarConta) then
   begin
-    FrmCadastrarConta.CpoIdConta.Text        := sId;
-    FrmCadastrarConta.CpoDescricaoConta.Text := sDescricao;
+    FrmCadastrarConta.CpoIdConta.Text        := sIdConta;
+    FrmCadastrarConta.CpoDescricaoConta.Text := QrSelecionaConta.FieldByName('DESCRICAO').AsString;
+    FrmCadastrarConta.CpoValorConta.Text     := QrSelecionaConta.FieldByName('VALOR').AsString;
     FrmCadastrarConta.CpoIdContaExit(Sender);
     UnCadastrarConta.bAbriuPorCadastrarConta := False;
   end;
   QrConsultaConta.Close;
+  QrSelecionaConta.Close;
   Close;
 end;
 

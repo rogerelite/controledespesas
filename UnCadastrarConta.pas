@@ -236,7 +236,7 @@ end;
 
 procedure TFrmCadastrarConta.BtnExcluirClick(Sender: TObject);
 begin
-  if MessageDlg('Confirma exclusão ?', mtConfirmation, [mbYes, mbNo],0) = mrNo then
+  if (MessageDlg('Confirma exclusão ?', mtConfirmation, [mbYes, mbNo],0) = mrNo) then
   begin
     Abort;
   end;
@@ -462,6 +462,8 @@ begin
   CpoValorParcela.Clear;
   CdsGrade.Edit;
   CdsGrade.EmptyDataSet;
+  GrpModoPagamento.Enabled   := True;
+  GrpModoPagamento.ItemIndex := 0;
 end;
 
 procedure TFrmCadastrarConta.CadastraConta;
@@ -737,7 +739,7 @@ begin
         StrToIntDef(CpoIdTipoConta.Text,0);
       QrCadastraConta.ExecSQL;
 
-      DeletarParcelas(QrCadastraConta.FieldByName('ID_CONTA').AsInteger);
+      DeletarParcelas(StrToIntDef(CpoIdConta.Text,0));
 
       QrCadastraParcela.Close;
       QrCadastraParcela.SQL.Text :=
@@ -789,6 +791,30 @@ begin
       QrCadastraConta.ParamByName('ID_CONTATIPO').AsInteger  :=
         StrToIntDef(CpoIdTipoConta.Text,0);
       QrCadastraConta.ExecSQL;
+
+      DeletarParcelas(StrToIntDef(CpoIdConta.Text,0));
+
+      QrCadastraParcela.Close;
+      QrCadastraParcela.SQL.Text :=
+        ' INSERT INTO parcela(NUMERO,        '+
+        '                     VALOR,         '+
+        '                     VENCIMENTO,    '+
+        '                     PAGO,          '+
+        '                     ID_CONTA)      '+
+        '              VALUES(:NUMERO,       '+
+        '                     :VALOR,        '+
+        '                     :VENCIMENTO,  '+
+        '                     :PAGO,         '+
+        '                     :ID_CONTA)     ';
+      QrCadastraParcela.ParamByName('NUMERO').AsInteger   := 1 ;
+      QrCadastraParcela.ParamByName('VALOR').AsCurrency   :=
+        StrToCurr(CpoValorConta.Text);
+
+      QrCadastraParcela.ParamByName('VENCIMENTO').AsDate  :=
+        CpoVencimentoUnico.Date;
+      QrCadastraParcela.ParamByName('PAGO').AsString := 'N';
+      QrCadastraParcela.ParamByName('ID_CONTA').AsInteger := RetornaUltimoId;
+      QrCadastraParcela.ExecSQL;
       LimpaCampos;
     end;
   end;
