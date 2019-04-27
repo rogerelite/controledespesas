@@ -236,6 +236,11 @@ end;
 
 procedure TFrmCadastrarConta.BtnExcluirClick(Sender: TObject);
 begin
+  if MessageDlg('Confirma exclusão ?', mtConfirmation, [mbYes, mbNo],0) = mrNo then
+  begin
+    Abort;
+  end;
+
   try
     QrExcluiParcela.Close;
     QrExcluiParcela.SQL.Text :=
@@ -672,7 +677,7 @@ begin
         StrToIntDef(CpoIdTipoConta.Text,0);
       QrCadastraConta.ExecSQL;
 
-      DeletarParcelas(QrCadastraConta.FieldByName('ID_CONTA').AsInteger);
+      DeletarParcelas(StrToIntDef(CpoIdConta.Text,0));
 
       CdsGrade.First;
       while not CdsGrade.Eof do
@@ -794,7 +799,7 @@ begin
   QrGrade.Close;
   QrGrade.SQL.Text :=
     ' DELETE                      '+
-    '   FROM parcelas             '+
+    '   FROM parcela              '+
     '  WHERE ID_CONTA = :ID_CONTA ';
   QrGrade.ParamByName('ID_CONTA').AsInteger := iIdConta;
   QrGrade.ExecSQL;
